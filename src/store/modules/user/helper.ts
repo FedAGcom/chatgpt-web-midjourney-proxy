@@ -2,10 +2,17 @@ import { ss } from '@/utils/storage'
 import { t } from '@/locales'
 const LOCAL_NAME = 'userStorage'
 
+export enum UserRole {
+  Admin = 'admin',
+  Free = 'free',
+  Pro = 'pro',
+}
+
 export interface UserInfo {
   avatar: string
   name: string
   description: string
+  role: UserRole
 }
 
 export interface UserState {
@@ -15,9 +22,10 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/Dooy/chatgpt-web-midjourney-proxy/main/src/assets/avatar.jpg',
-      name:  t('mjset.sysname'),//'AI绘图',
+      avatar: 'https://i.ibb.co/pv3htXH/Neuro-Scribe-Logo.png',
+      name: t('mjset.sysname'), // 'AI绘图',
       description: 'Star on <a href="https://github.com/Dooy/chatgpt-web-midjourney-proxy" class="text-blue-500" target="_blank" >GitHub</a>',
+      role: 'admin',
     },
   }
 }

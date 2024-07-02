@@ -37,6 +37,7 @@ declare namespace Chat {
 		usingContext: boolean;
 		history: History[]
 		chat: { uuid: number; data: Chat[] }[]
+		avaliableModels: string[]
 	}
 
 	interface ConversationRequest {

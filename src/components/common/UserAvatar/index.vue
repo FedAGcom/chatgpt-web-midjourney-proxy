@@ -2,7 +2,8 @@
 import { computed } from 'vue'
 import { NAvatar } from 'naive-ui'
 import { useUserStore } from '@/store'
-import defaultAvatar from '@/assets/avatar.jpg'
+// import defaultAvatar from '@/assets/avatar.jpg'
+import defaultAvatar from '@/assets/NeuroScribeLogo.png'
 import { isString } from '@/utils/is'
 
 const userStore = useUserStore()
@@ -19,15 +20,16 @@ const userInfo = computed(() => userStore.userInfo)
           round
           :src="userInfo.avatar"
           :fallback-src="defaultAvatar"
+          class="n-avatar-new "
         />
       </template>
       <template v-else>
-        <NAvatar size="large" round :src="defaultAvatar" />
+        <NAvatar size="large" round :src="defaultAvatar" class="n-avatar-new " />
       </template>
     </div>
     <div class="flex-1 min-w-0 ml-2">
       <h2 class="overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
-        {{ userInfo.name ?? 'AI绘图' }}
+        {{ userInfo.name ?? 'NeuroScribe' }}
       </h2>
       <p class="overflow-hidden text-xs text-gray-500 text-ellipsis whitespace-nowrap">
         <span
@@ -38,3 +40,9 @@ const userInfo = computed(() => userStore.userInfo)
     </div>
   </div>
 </template>
+
+<style scoped>
+  .n-avatar-new {
+    --n-merged-color: white;
+  }
+</style>

@@ -2,12 +2,12 @@
 import { computed, ref } from 'vue'
 import { NModal, NTabPane, NTabs } from 'naive-ui'
 import General from './General.vue'
-import Advanced from './Advanced.vue'
-import aiModel from '@/views/mj/aiModel.vue'
-import aiSetServer from '@/views/mj/aiSetServer.vue'
 import About from './About.vue'
-import { homeStore, useAuthStore } from '@/store'
+import aiModel from '@/views/mj/aiModel.vue'
+import { homeStore, useAuthStore, useUserStore } from '@/store'
 import { SvgIcon } from '@/components/common'
+import aiSetServer from '@/views/mj/aiSetServer.vue'
+import { UserRole } from '@/store/modules/user/helper'
 
 interface Props {
   visible: boolean
@@ -23,9 +23,13 @@ const emit = defineEmits<Emit>()
 
 const authStore = useAuthStore()
 
+const userStore = useUserStore()
+
 const isChatGPTAPI = computed<boolean>(() => !!authStore.isChatGPTAPI)
 
-const active = ref('General')
+const role = computed(() => userStore.userInfo.role)
+
+const active = ref('Advanced')
 
 const show = computed({
   get() {
@@ -41,7 +45,7 @@ const show = computed({
   <NModal v-model:show="show" :auto-focus="false" preset="card" style="width: 95%; max-width: 640px">
     <div>
       <NTabs v-model:value="active" type="line" animated>
-        <NTabPane name="General" tab="General">
+        <NTabPane v-if="role === UserRole.Admin" name="General" tab="General">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:file-user-line" />
             <span class="ml-2">{{ $t('setting.general') }}</span>
@@ -53,31 +57,27 @@ const show = computed({
         <NTabPane v-if="isChatGPTAPI" name="Advanced" tab="Advanced">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:equalizer-line" />
-            <!-- <span class="ml-2">{{ $t('setting.advanced') }}</span> -->
             <span class="ml-2">{{ $t('mjset.model') }}</span>
           </template>
           <div class="min-h-[100px]">
-            <!-- <Advanced /> -->
-            <aiModel/>
+            <aiModel />
           </div>
         </NTabPane>
 
-        <NTabPane name="server" tab="server" v-if=" ! homeStore.myData.session.isHideServer">
+        <NTabPane v-if="role === UserRole.Admin && !homeStore.myData.session.isHideServer" name="server" tab="server">
           <template #tab>
             <SvgIcon class="text-lg" icon="mingcute:server-line" />
             <span class="ml-2">{{ $t('mjset.server') }}</span>
           </template>
           <aiSetServer />
         </NTabPane>
-        <NTabPane name="Config" tab="Config">
+        <NTabPane v-if="role === UserRole.Admin" name="Config" tab="Config">
           <template #tab>
             <SvgIcon class="text-lg" icon="ri:list-settings-line" />
-            <!-- <span class="ml-2">{{ $t('setting.config') }}</span> -->
             <span class="ml-2">{{ $t('mjset.about') }}</span>
           </template>
           <About />
         </NTabPane>
-
       </NTabs>
     </div>
   </NModal>

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
+import { UserRole } from '../user/helper'
 import { defaultState, getLocalState, setLocalState } from './helper'
 import { router } from '@/router'
 import { homeStore } from '@/store/homeStore'
-import { sleep } from '@/api/suno'
 import { mlog } from '@/api'
 
 export const useChatStore = defineStore('chat-store', {
@@ -184,13 +184,13 @@ export const useChatStore = defineStore('chat-store', {
         this.recordState()
       }
 
-      //清空标题
-      const i2= this.history.findIndex( v=>v.uuid===uuid )
+      // 清空标题
+      const i2 = this.history.findIndex(v => v.uuid === uuid)
       if (i2 !== -1) {
-        this.history[i2].title= "New Chat"
-         this.recordState()
+        this.history[i2].title = 'New Chat'
+        this.recordState()
       }
-      //end 清空标题
+      // end 清空标题
     },
 
     clearHistory() {
@@ -199,14 +199,30 @@ export const useChatStore = defineStore('chat-store', {
     },
 
     async reloadRoute(uuid?: number) {
-      this.recordState();
-      mlog('toMyuid19','reloadRoute')
-      //await sleep(1000)
-      await router.push({ name: homeStore.myData.local=='draw'?'draw': 'Chat', params: { uuid } })
+      this.recordState()
+      mlog('toMyuid19', 'reloadRoute')
+      // await sleep(1000)
+      await router.push({ name: homeStore.myData.local == 'draw' ? 'draw' : 'Chat', params: { uuid } })
     },
 
     recordState() {
       setLocalState(this.$state)
+    },
+
+    setAvailiableModels(role: UserRole) {
+      switch (role) {
+        case UserRole.Admin:
+          this.avaliableModels = ['gpt-3.5-turbo-0301', 'gpt-4-turbo', 'gpt-4o', 'gpt-4-all', 'gpt-3.5-net', 'gpt-4-gizmo', 'gemini-1.5-pro-latest', 'gemini-1.5-flash', 'claude-3-Sonnet', 'claude-3-Haiku', 'claude-3-Opus']
+          break
+        case UserRole.Free:
+          this.avaliableModels = ['gpt-3.5-turbo-0301']
+          break
+        case UserRole.Pro:
+          this.avaliableModels = ['gpt-3.5-turbo-0301', 'gpt-4o', 'gpt-4-all', 'gpt-3.5-net', 'gpt-4-gizmo']
+          break
+        default:
+          this.avaliableModels = ['gpt-3.5-turbo-0301', 'gpt-4o', 'gpt-4-all', 'gpt-3.5-net', 'gpt-4-gizmo', 'gemini-1.5-pro-latest', 'gemini-1.5-flash', 'claude-3-Sonnet', 'claude-3-Haiku', 'claude-3-Opus']
+      }
     },
   },
 })
