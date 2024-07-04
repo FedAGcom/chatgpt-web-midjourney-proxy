@@ -4,7 +4,7 @@ on:
   push:
     branches: ['develop']
 env:
-  IMAGE_NAME: midjourney-proxy:dev
+  IMAGE_NAME: midjourney-proxy
   IMAGE_TAG: dev
 jobs:
   build:
