@@ -24,7 +24,7 @@ export function defaultSetting(): UserState {
     userInfo: {
       avatar: 'https://i.ibb.co/pv3htXH/Neuro-Scribe-Logo.png',
       name: t('mjset.sysname'), // 'AI绘图',
-      description: 'Star on <a href="https://github.com/Dooy/chatgpt-web-midjourney-proxy" class="text-blue-500" target="_blank" >GitHub</a>',
+      description: '',
       role: 'admin',
     },
   }
