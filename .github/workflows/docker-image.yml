@@ -24,17 +24,17 @@ jobs:
           docker push ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       
-#      - name: executing remote ssh commands 
-#        uses: appleboy/ssh-action@v1.0.3
-#        with:
-#          host: ${{ secrets.FEDAG_SSH_HOST }}
-#          username: ${{ secrets.FEDAG_SSH_USER }}
-#          password: ${{ secrets.FEDAG_SSH_PASSWORD }}
-#          port: ${{ secrets.FEDAG_SSH_PORT }}
-#          script: |
-#            cd /../
-#            cd ${{ secrets.FEDAG_SSH_FOLDER }}
-#            docker compose down
-#            docker rmi ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-#            docker compose up -d
+      - name: executing remote ssh commands 
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FEDAG_SSH_HOST }}
+          username: ${{ secrets.FEDAG_SSH_USER }}
+          password: ${{ secrets.FEDAG_SSH_PASSWORD }}
+          port: ${{ secrets.FEDAG_SSH_PORT }}
+          script: |
+            cd /../
+            cd ${{ secrets.FEDAG_SSH_FOLDER }}
+            docker compose down
+            docker rmi ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            docker compose up -d
       
