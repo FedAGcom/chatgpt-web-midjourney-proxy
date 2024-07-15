@@ -41,7 +41,8 @@ function onScrollToTop() {
 }
 
 function handleBackToNeuroscribe() {
-  window.location.href = 'https://neuroscribe.ru/'
+  // window.location.href = 'https://neuroscribe.ru/'
+  window.open('https://neuroscribe.ru/', '_blank')
 }
 
 function handleExport() {
@@ -52,6 +53,7 @@ function handleClear() {
   emit('handleClear')
 }
 const uuid = chatStore.active
+console.log('uuid', uuid)
 const chatSet = new chatSetting(uuid == null ? 1002 : uuid)
 const nGptStore = ref()
 nGptStore.value = chatSet.getGptConfig()

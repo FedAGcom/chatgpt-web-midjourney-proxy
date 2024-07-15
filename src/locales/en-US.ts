@@ -18,6 +18,8 @@ export default {
     clearSuccess: 'Clear Success',
     yes: 'Yes',
     no: 'No',
+    editSave: 'Save',
+    editCancel: 'Cancel',
     confirm: 'Confirm',
     download: 'Download',
     noData: 'No Data',
@@ -211,6 +213,7 @@ export default {
     drawinfo: 'AI Drawing with Midjourney Engine',
     gallery: 'Gallery',
     galleryInfo: 'My Gallery',
+    aiChat: 'AI Chat',
   },
   helptab: {
     help: 'Help',

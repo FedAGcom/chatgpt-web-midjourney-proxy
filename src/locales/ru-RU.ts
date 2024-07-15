@@ -18,6 +18,8 @@ export default {
     clearSuccess: 'Очищено успешно',
     yes: 'Да',
     no: 'Нет',
+    editSave: 'Сохранить',
+    editCancel: 'Отменить',
     confirm: 'Подтвердить',
     download: 'Загрузить',
     noData: 'Нет данных',
@@ -26,7 +28,8 @@ export default {
     failed: 'Не удалось',
     verify: 'Проверить',
     unauthorizedTips: 'Не авторизован, сначала подтвердите свою личность.',
-    stopResponding: 'Прекращение отклика',
+    stopResponding: 'Стоп',
+    // stopResponding: 'Прекращение отклика',
   },
   chat: {
     newChatButton: 'Новый чат',
@@ -210,6 +213,7 @@ export default {
     drawinfo: 'Рисование с использованием искусственного интеллекта Midjourney',
     gallery: 'Галерея',
     galleryInfo: 'Моя галерея',
+    aiChat: 'Нейрочат',
   },
   helptab: {
     help: 'Помощь',

@@ -307,6 +307,7 @@ export const subModel = async (opt: subModelType) => {
     frequency_penalty = gStore.frequency_penalty ?? frequency_penalty
     max_tokens = gStore.max_tokens
   }
+  console.log('ADASAS', opt.model)
   if (model == 'gpt-4-vision-preview' && max_tokens > 2048)
     max_tokens = 2048
 
@@ -316,6 +317,7 @@ export const subModel = async (opt: subModelType) => {
 
   const body = {
     max_tokens,
+    // model,
     model,
     temperature,
     top_p,
@@ -594,6 +596,5 @@ export const getHistoryMessage = async (dataSources: Chat.Chat[], loadingCnt = 1
 }
 
 export const isDisableMenu = (menu: string) => {
-  console.log('homeStore', homeStore)
   return (homeStore.myData.session && homeStore.myData.session.menuDisable && homeStore.myData.session.menuDisable.includes(menu))
 }

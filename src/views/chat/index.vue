@@ -48,12 +48,20 @@ const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 const inputRef = ref<Ref | null>(null)
 
+// onMounted(() => {
+//   const storedPrompt = localStorage.getItem('prompt')
+
+//   if (storedPrompt) {
+//     prompt.value = storedPrompt
+//     localStorage.removeItem('prompt')
+//   }
+// })
+
 // 添加PromptStore
 const promptStore = usePromptStore()
 
 // 使用storeToRefs，保证store修改后，联想部分能够重新渲染
 const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
-
 // 未知原因刷新页面，loading 状态不会重置，手动重置
 dataSources.value.forEach((item, index) => {
   if (item.loading)
@@ -452,8 +460,8 @@ function handleEdit(index: number) {
   dialog.warning({
     title: t('common.edit'),
     content: inputNode,
-    positiveText: t('common.yes'),
-    negativeText: t('common.no'),
+    positiveText: t('common.editSave'),
+    negativeText: t('common.editCancel'),
     onPositiveClick: () => {
       updateChatSome(+uuid, index, { text: editedMessage.value })
     },
@@ -667,7 +675,7 @@ const ychat = computed(() => {
               <Message
                 v-for="(item, index) of dataSources"
                 :key="index"
-                :date-time="item.dateTime"
+                :date-time="item.dateTime?.slice(0, -3)"
                 :text="item.text"
                 :inversion="item.inversion"
                 :error="item.error"
@@ -678,14 +686,14 @@ const ychat = computed(() => {
                 @delete="handleDelete(index)"
                 @edit="handleEdit(index)"
               />
-              <Message
+              <!-- <Message
                 v-if="ychat.text"
                 :key="dataSources.length" :inversion="true"
                 :date-time="$t('mj.typing')"
                 :chat="ychat"
                 :text="ychat.text"
                 :index="dataSources.length"
-              />
+              /> -->
               <div class="sticky bottom-0 left-0 flex justify-center">
                 <NButton v-if="loading" type="warning" @click="handleStop">
                   <template #icon>
