@@ -3,9 +3,10 @@ import type { DataTableColumns } from 'naive-ui'
 import { computed, h, ref, watch } from 'vue'
 import { NButton, NDataTable, NInput, NList, NListItem, NModal, NPopconfirm, NSpace, NThing, useMessage } from 'naive-ui'
 import PromptRecommend from '../../../assets/recommend.json'
-import { usePromptStore } from '@/store'
+import { usePromptStore, useUserStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
+import { UserRole } from '@/store/modules/user/helper'
 
 interface DataProps {
   renderKey: string
@@ -32,6 +33,10 @@ const show = computed({
   get: () => props.visible,
   set: (visible: boolean) => emit('update:visible', visible),
 })
+
+const userStore = useUserStore()
+
+const role = computed(() => userStore.userInfo.role)
 
 const showModal = ref(false)
 
@@ -76,6 +81,10 @@ const changeShowModal = (mode: 'add' | 'modify' | 'local_import', selected = { k
   }
   showModal.value = !showModal.value
   modalMode.value = mode
+}
+
+const setActivePrompt = (activePrompt: string) => {
+  promptStore.setActivePropmt(activePrompt)
 }
 
 // 在线导入相关
@@ -334,7 +343,10 @@ const dataSource = computed(() => {
         class="flex gap-3 mb-4"
         :class="[isMobile ? 'flex-col' : 'flex-row justify-between']"
       >
-        <div class="flex items-center space-x-4">
+        <div
+          v-if="role === UserRole.Admin"
+          class="flex items-center space-x-4"
+        >
           <NButton
             type="primary"
             size="small"
@@ -365,7 +377,7 @@ const dataSource = computed(() => {
           </NPopconfirm>
         </div>
         <div class="flex items-center">
-          <NInput v-model:value="searchValue" style="width: 100%" />
+          <NInput v-model:value="searchValue" placeholder="Поиск запросов" style="width: 100%" />
         </div>
       </div>
       <NDataTable
@@ -375,6 +387,7 @@ const dataSource = computed(() => {
         :data="dataSource"
         :pagination="pagination"
         :bordered="false"
+        @click="setActivePrompt(dataSource?.[0]?.renderValue)"
       />
       <NList v-if="isMobile" style="max-height: 400px; overflow-y: auto;">
         <NListItem v-for="(item, index) of dataSource" :key="index">

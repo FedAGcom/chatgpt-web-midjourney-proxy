@@ -85,7 +85,6 @@ const modellist = computed(() => { //
     new Map(rz.map(item => [JSON.stringify(item), item]))
       .values(),
   )
-  console.log('uniqueArray', uniqueArray)
 
   return uniqueArray
 })

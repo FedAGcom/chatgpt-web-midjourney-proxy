@@ -8,10 +8,14 @@ export const usePromptStore = defineStore('prompt-store', {
   actions: {
     updatePromptList(promptList: []) {
       this.$patch({ promptList })
-      setLocalPromptList({ promptList })
+      // setLocalPromptList({ promptList })
+      setLocalPromptList({ promptList, activePrompt: '' })
     },
     getPromptList() {
       return this.$state
+    },
+    setActivePropmt(activePrompt: string) {
+      this.$patch({ activePrompt })
     },
   },
 })
