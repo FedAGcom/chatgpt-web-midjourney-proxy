@@ -85,6 +85,7 @@ const changeShowModal = (mode: 'add' | 'modify' | 'local_import', selected = { k
 
 const setActivePrompt = (activePrompt: string) => {
   promptStore.setActivePropmt(activePrompt)
+  emit('update:visible', false)
 }
 
 // 在线导入相关
@@ -269,7 +270,7 @@ const pagination = computed(() => {
 
 // table相关
 const createColumns = (): DataTableColumns<DataProps> => {
-  return [
+  const columns = [
     {
       title: t('store.title'),
       key: 'renderKey',
@@ -278,38 +279,44 @@ const createColumns = (): DataTableColumns<DataProps> => {
       title: t('store.description'),
       key: 'renderValue',
     },
-    {
+  ]
+
+  if (role.value === UserRole.Admin) {
+    columns.push({
       title: t('common.action'),
       key: 'actions',
       width: 100,
       align: 'center',
       render(row) {
         return h('div', { class: 'flex items-center flex-col gap-2' }, {
-          default: () => [h(
-            NButton,
-            {
-              tertiary: true,
-              size: 'small',
-              type: 'info',
-              onClick: () => changeShowModal('modify', row),
-            },
-            { default: () => t('common.edit') },
-          ),
-          h(
-            NButton,
-            {
-              tertiary: true,
-              size: 'small',
-              type: 'error',
-              onClick: () => deletePromptTemplate(row),
-            },
-            { default: () => t('common.delete') },
-          ),
+          default: () => [
+            h(
+              NButton,
+              {
+                tertiary: true,
+                size: 'small',
+                type: 'info',
+                onClick: () => changeShowModal('modify', row),
+              },
+              { default: () => t('common.edit') },
+            ),
+            h(
+              NButton,
+              {
+                tertiary: true,
+                size: 'small',
+                type: 'error',
+                onClick: () => deletePromptTemplate(row),
+              },
+              { default: () => t('common.delete') },
+            ),
           ],
         })
       },
-    },
-  ]
+    })
+  }
+
+  return columns
 }
 
 const columns = createColumns()
@@ -387,7 +394,7 @@ const dataSource = computed(() => {
         :data="dataSource"
         :pagination="pagination"
         :bordered="false"
-        @click="setActivePrompt(dataSource?.[0]?.renderValue)"
+        :row-props="(row, index) => ({ onClick: () => setActivePrompt(row.renderValue) })"
       />
       <NList v-if="isMobile" style="max-height: 400px; overflow-y: auto;">
         <NListItem v-for="(item, index) of dataSource" :key="index">

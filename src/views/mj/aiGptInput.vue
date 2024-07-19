@@ -13,10 +13,10 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 import { SvgIcon } from '@/components/common'
 import {
-  GptUploader, Recognition, canVisionModel, checkDisableGpt4, countTokens, getFileFromClipboard
+  GptUploader, Recognition, canVisionModel, checkDisableGpt4, countTokensByRole, getFileFromClipboard
   , isFileMp3, mlog, regCookie, upImg,
 } from '@/api'
-import { gptConfigStore, homeStore, useChatStore } from '@/store'
+import { gptConfigStore, homeStore, useChatStore, useUserStore } from '@/store'
 import aiModel from '@/views/mj/aiModel.vue'
 import { useIconRender } from '@/hooks/useIconRender'
 
@@ -26,6 +26,10 @@ const { iconRender } = useIconRender()
 // import FormData from 'form-data'
 const route = useRoute()
 const chatStore = useChatStore()
+
+const userStore = useUserStore()
+
+const role = computed(() => userStore.userInfo.role)
 
 const fsRef = ref()
 const st = ref<{ fileBase64: string[];isLoad: number;isShow: boolean;showMic: boolean;micStart: boolean }>({
@@ -77,10 +81,11 @@ function selectFile(input: any) {
 
 const myToken = ref({ remain: 0, modelTokens: '4k' })
 const funt = async () => {
-  console.log('chatStore.active', chatStore.active)
-  const d = await countTokens(dataSources.value, mvalue.value, chatStore.active ?? 1002)
-  myToken.value = d
-  return d
+  // const d = await countTokens(dataSources.value, mvalue.value, chatStore.active ?? 1002)
+  const b = await countTokensByRole(role.value, dataSources.value, mvalue.value, chatStore.active ?? 1002)
+
+  myToken.value = b
+  return b
 }
 watch(() => mvalue.value, funt)
 watch(() => dataSources.value, funt)

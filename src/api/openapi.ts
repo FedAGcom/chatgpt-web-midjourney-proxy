@@ -7,6 +7,7 @@ import { chatSetting } from './chat'
 import { gptConfigStore, gptServerStore, homeStore, useAuthStore } from '@/store'
 import { isNumber, isObject } from '@/utils/is'
 import { t } from '@/locales'
+import { UserRole } from '@/store/modules/user/helper'
 // import {encode,  encodeChat}  from "gpt-tokenizer"
 // import {encode,  encodeChat} from "gpt-tokenizer/cjs/encoding/cl100k_base.js";
 // import { get_encoding } from '@dqbd/tiktoken'
@@ -491,6 +492,47 @@ export const countTokens = async (dataSources: Chat.Chat[], input: string, uuid:
   const rz = { system: 0, input: 0, history: 0, remain: 330, modelTokens: '4k', planOuter: myStore.max_tokens }
   const model = myStore.model
   const max = getModelMax(model)
+  let unit = 1024
+  if (model == 'gpt-4-1106-preview' || model == 'gpt-4-vision-preview')
+    unit = 1000
+  // gpt-4-turbo-2024-04-09
+  if (model.includes('gpt-4-turbo'))
+    unit = 1000
+  rz.modelTokens = `${max}k`
+  // cl100k_base.encode(input)
+
+  const encode = await encodeAsync()
+  rz.input = encode(input).length
+  rz.system = encode(getSystemMessage()).length
+  const encodeChat = await encodeChatAsync()
+  const msg = await getHistoryMessage(dataSources, 1)
+  rz.history = msg.length == 0 ? 0 : encodeChat(msg, model.includes('gpt-4') ? 'gpt-4' : 'gpt-3.5-turbo').length
+  //
+  rz.remain = unit * max - rz.history - rz.planOuter - rz.input - rz.system
+
+  return rz
+}
+export const countTokensByRole = async (role: UserRole, dataSources: Chat.Chat[], input: string, uuid: number) => {
+  let max
+  switch (role) {
+    case UserRole.Admin:
+      max = 8
+      break
+    case UserRole.Pro:
+      max = 6
+      break
+    case UserRole.Free:
+      max = 4
+      break
+    default:
+      max = 4
+  }
+
+  const chatSet = new chatSetting(uuid)
+  const myStore = chatSet.getGptConfig()
+  const rz = { system: 0, input: 0, history: 0, remain: 330, modelTokens: '4k', planOuter: myStore.max_tokens }
+  const model = myStore.model
+  // const max = getModelMax(model)
   let unit = 1024
   if (model == 'gpt-4-1106-preview' || model == 'gpt-4-vision-preview')
     unit = 1000
