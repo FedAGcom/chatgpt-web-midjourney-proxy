@@ -4,7 +4,7 @@ on:
   push:
     branches: ['develop']
 env:
-  IMAGE_NAME: midjourney-proxy
+  IMAGE_NAME: chatgpt-web-midjourney-proxy
   IMAGE_TAG: dev
 jobs:
   build:
@@ -22,8 +22,6 @@ jobs:
           docker login --username deniel369 --password ${{ secrets.FEDAG_TOKEN }} ghcr.io
           docker build . --tag ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           docker push ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-
-      
       - name: executing remote ssh commands 
         uses: appleboy/ssh-action@v1.0.3
         with:
