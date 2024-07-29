@@ -219,6 +219,9 @@ export default {
     help: 'Помощь',
     education: 'Обучение',
   },
+  tarifftab: {
+    tariff: 'Тарифы',
+  },
   mjchat: {
     loading: 'Идет загрузка изображения',
     openurl: 'Открыть ссылку напрямую',
