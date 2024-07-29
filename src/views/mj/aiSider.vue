@@ -2,10 +2,12 @@
 import { computed, defineAsyncComponent, ref } from 'vue'
 import { NAvatar, NTooltip } from 'naive-ui'
 import { useRouter } from 'vue-router'
+import aiTariffs from './aiTariffs.vue'
+import defaultAvatarDark from '@/assets/NeuroScribeLogoSmallDark.svg'
+import defaultAvatarLight from '@/assets/NeuroScribeLogoSmallLight.svg'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { homeStore, useAppStore, useChatStore, useUserStore } from '@/store'
-import defaultAvatar from '@/assets/avatar.jpg'
 import { router } from '@/router'
 import { isDisableMenu } from '@/api'
 const { isMobile } = useBasicLayout()
@@ -17,6 +19,8 @@ const Setting = defineAsyncComponent(() => import('@/components/common/Setting/i
 const userStore = useUserStore()
 
 const st = ref({ show: false, showImg: false, menu: [], active: 'chat' })
+
+const showTariff = ref(false)
 
 const userInfo = computed(() => userStore.userInfo)
 
@@ -41,6 +45,10 @@ const chatId = computed(() => chatStore.active ?? '1002')
 const appStore = useAppStore()
 
 const theme = computed(() => appStore.theme)
+
+const defaultAvatarTest = computed(() => theme.value === 'dark'
+  ? defaultAvatarDark
+  : defaultAvatarLight)
 </script>
 
 <template>
@@ -120,9 +128,28 @@ const theme = computed(() => appStore.theme)
       </div>
       <div class="flex flex-col  space-y-2">
         <NAvatar
-          v-if="userInfo.avatar" size="large" round :src="userInfo.avatar" :fallback-src="defaultAvatar"
+          v-if="userInfo.avatar" size="large" round :src="defaultAvatarTest" :fallback-src="defaultAvatarTest"
           class=" cursor-pointer n-avatar-new"
         />
+        <!-- <NAvatar
+          v-if="userInfo.avatar" size="large" round :src="userInfo.avatar" :fallback-src="defaultAvatar"
+          class=" cursor-pointer n-avatar-new"
+        /> -->
+
+        <a
+          v-if="!isDisableMenu ('tariff')"
+          class=" router-link-exact-active h-10 w-10 cursor-pointer rounded-full bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]"
+          @click="showTariff = true"
+        >
+          <NTooltip placement="right" trigger="hover">
+            <template #trigger>
+              <div class="flex h-full justify-center items-center   py-1 flex-col">
+                <div class="text-base">$</div>
+              </div>
+            </template>
+            {{ $t('tarifftab.tariff') }}
+          </NTooltip>
+        </a>
 
         <HoverButton>
           <div class="text-xl text-[#4f555e] dark:text-white flex h-full justify-center items-center " @click="appStore.setTheme(theme === 'dark' ? 'light' : 'dark')">
@@ -140,6 +167,7 @@ const theme = computed(() => appStore.theme)
     </div>
   </div>
   <Setting v-if="st.show" v-model:visible="st.show" />
+  <aiTariffs v-model:visible="showTariff" />
 
   <!-- <n-drawer v-model:show="st.showImg" :placement="isMobile?'bottom':'right'"  :class="isMobile?['!h-[90vh]']: ['!w-[80vw]']" style="--n-body-padding:0">
     <n-drawer-content title="GPT store" closable>

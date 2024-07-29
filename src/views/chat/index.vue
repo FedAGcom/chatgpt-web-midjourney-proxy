@@ -17,12 +17,12 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { gptConfigStore, gptServerStore, gptsUlistStore, homeStore, useChatStore, usePromptStore } from '@/store'
+import { gptConfigStore, gptServerStore, gptsUlistStore, homeStore, useAppStore, useChatStore, usePromptStore } from '@/store'
 import type { gptsType } from '@/api'
 import { chatSetting, fetchChatAPIProcess, mlog, myFetch } from '@/api'
 import { t } from '@/locales'
-import defaultAvatar from '@/assets/NeuroScribeLogo.png'
-import NeuroScribeLogo from '@/assets/NeuroScribeLogo.png'
+import defaultAvatarDark from '@/assets/NeuroScribeLogoSmallDark.svg'
+import defaultAvatarLight from '@/assets/NeuroScribeLogoSmallLight.svg'
 
 let controller = new AbortController()
 
@@ -648,6 +648,14 @@ const ychat = computed(() => {
 
   return { text, dateTime: t('chat.preview') } as Chat.Chat
 })
+
+const appStore = useAppStore()
+
+const theme = computed(() => appStore.theme)
+
+const defaultAvatar = computed(() => theme.value === 'dark'
+  ? defaultAvatarDark
+  : defaultAvatarLight)
 </script>
 
 <template>
@@ -672,7 +680,7 @@ const ychat = computed(() => {
             </div>
             <div v-else-if="homeStore.myData.session.notify" class="text-neutral-300 mt-4" v-html="homeStore.myData.session.notify" />
             <div v-else class="flex items-center justify-center mt-4 text-center text-neutral-300 gap-2">
-              <NAvatar size="large" round :src="NeuroScribeLogo" class="n-avatar-new" />
+              <NAvatar size="large" round :src="defaultAvatar" class="n-avatar-new" />
               <span>NeuroScribe~</span>
             </div>
           </template>

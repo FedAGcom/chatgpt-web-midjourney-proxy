@@ -23,6 +23,7 @@ export function defaultSetting(): UserState {
   return {
     userInfo: {
       avatar: 'https://i.ibb.co/pv3htXH/Neuro-Scribe-Logo.png',
+      // avatar: 'https://ibb.co/0yDFDF9',
       name: t('mjset.sysname'), // 'AI绘图',
       description: '',
       role: 'admin',

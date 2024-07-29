@@ -1,27 +1,43 @@
 <script setup lang='ts'>
 import { computed } from 'vue'
 import { NAvatar } from 'naive-ui'
-import { useUserStore } from '@/store'
-// import defaultAvatar from '@/assets/avatar.jpg'
-import defaultAvatar from '@/assets/NeuroScribeLogo.png'
+import { useAppStore, useUserStore } from '@/store'
+import defaultAvatarDark from '@/assets/NeuroScribeLogoSmallDark.svg'
+import defaultAvatarLight from '@/assets/NeuroScribeLogoSmallLight.svg'
 import { isString } from '@/utils/is'
 
 const userStore = useUserStore()
+
+const appStore = useAppStore()
+
+const theme = computed(() => appStore.theme)
+
+const defaultAvatar = computed(() => theme.value === 'dark'
+  ? defaultAvatarDark
+  : defaultAvatarLight)
 
 const userInfo = computed(() => userStore.userInfo)
 </script>
 
 <template>
   <div class="flex items-center overflow-hidden">
-    <div class="w-10 h-10 overflow-hidden rounded-full shrink-0">
+    <div class="w-10 h-10 overflow-hidden rounded-full shrink-0" style="display: flex; justify-content: center;">
       <template v-if="isString(userInfo.avatar) && userInfo.avatar.length > 0">
-        <NAvatar
+        <!-- <NAvatar
           size="large"
           round
           :src="userInfo.avatar"
           :fallback-src="defaultAvatar"
           class="n-avatar-new "
-        />
+        /> -->
+        <!-- <NAvatar
+          size="large"
+          round
+          src="../../../assets/NeuroScribeLogoSmall.svg"
+          :fallback-src="defaultAvatar"
+          class="n-avatar-new "
+        /> -->
+        <img :src="defaultAvatar" alt="">
       </template>
       <template v-else>
         <NAvatar size="large" round :src="defaultAvatar" class="n-avatar-new " />

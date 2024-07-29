@@ -219,6 +219,9 @@ export default {
     help: 'Help',
     education: 'Education',
   },
+  tarifftab: {
+    tariff: 'Tariff',
+  },
   mjchat: {
     loading: 'Loading Image',
     openurl: 'Open Link Directly',
