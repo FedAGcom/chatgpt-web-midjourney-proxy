@@ -43,12 +43,12 @@ watch(() => homeStore.myData.act, (n: string) => {
         {{ $t('mjtab.chat') }}
       </div>
     </div>
-    <div v-if="!isDisableMenu ('gpts')" class="flex items-center justify-center flex-col " @click="homeStore.setMyData({ act: 'showgpts' }) ">
+    <!-- <div v-if="!isDisableMenu ('gpts')" class="flex items-center justify-center flex-col " @click="homeStore.setMyData({ act: 'showgpts' }) ">
       <SvgIcon icon="ri:apps-fill" class="text-3xl" />
       <div class="text-[13px]">
         GPTs
       </div>
-    </div>
+    </div> -->
 
     <div v-if="!isDisableMenu ('draws')" class="flex items-center justify-center flex-col " :class="[goHome == 'draw' ? 'active' : '']" @click="homeStore.setMyData({ act: 'showDraw' }) ">
       <SvgIcon icon="ic:outline-palette" class="text-3xl" />
