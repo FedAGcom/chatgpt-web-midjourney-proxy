@@ -66,7 +66,7 @@ const defaultAvatarTest = computed(() => theme.value === 'dark'
             {{ $t('mjtab.aiChat') }}
           </NTooltip>
         </a>
-        <a v-if="!isDisableMenu ('gpts')" class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]" @click="homeStore.setMyData({ act: 'showgpts' }) ">
+        <!-- <a v-if="!isDisableMenu ('gpts')" class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]" @click="homeStore.setMyData({ act: 'showgpts' }) ">
           <NTooltip placement="right" trigger="hover">
             <template #trigger>
               <div class="flex h-full justify-center items-center   py-1 flex-col">
@@ -76,7 +76,7 @@ const defaultAvatarTest = computed(() => theme.value === 'dark'
             </template>
             ChatGPT Store
           </NTooltip>
-        </a>
+        </a> -->
 
         <a v-if="!isDisableMenu ('draws')" class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]" @click="st.active = 'draw'; urouter.push(`/draw`)">
           <NTooltip placement="right" trigger="hover">
