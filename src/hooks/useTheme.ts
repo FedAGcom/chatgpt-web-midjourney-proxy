@@ -22,10 +22,122 @@ export function useTheme() {
   const themeOverrides = computed<GlobalThemeOverrides>(() => {
     if (isDark.value) {
       return {
-        common: {},
+        common: {
+          // Общие стили для всех компонентов в тёмной теме
+        },
+        Button: {
+          textColorHover: '#126eb0',
+          borderFocus: '2px solid #126eb0',
+          borderHover: '2px solid #126eb0',
+          borderPressedSuccess: '#126eb0',
+          textColorFocus: '#126eb0',
+          borderPressed: '2px solid #126eb0',
+          textColorPressed: '#126eb0',
+
+          // primary
+          colorPrimary: '#126eb0',
+          borderPrimary: 'transparent',
+          colorHoverPrimary: '#126eb0',
+          textColorHoverPrimary: '#fff',
+          colorFocusPrimary: '#126eb0',
+          borderFocusPrimary: '2px solid #126eb0',
+          borderHoverPrimary: '2px solid #126eb0',
+          borderFocusPrimaryPrimary: '#126eb0',
+          borderPressedSuccessPrimary: '#126eb0',
+          textColorFocusPrimary: '#fff',
+          borderPressedPrimary: '2px solid #126eb0',
+          textColorPressedPrimary: '#126eb0',
+
+          // text only
+          textColorTextPrimary: '#126eb0',
+          textColorTextHoverPrimary: '#126eb0',
+        },
+        Input: {
+          borderHover: '2px solid #126eb0',
+          borderFocus: '2px solid #126eb0',
+        },
+        Tabs: {
+          barColor: '#126eb0',
+          tabTextColorHoverLine: '#126eb0',
+          tabTextColorActiveLine: '#126eb0',
+        },
+        InternalSelection: {
+          borderHover: '2px solid #126eb0',
+          borderActive: '2px solid #126eb0',
+          borderFocus: '2px solid #126eb0',
+        },
+        InternalSelectMenu: {
+          optionTextColorActive: '#126eb0',
+          optionCheckColor: '#126eb0',
+        },
+        Slider: {
+          fillColor: '#126eb0',
+          fillColorHover: '#126eb0',
+        },
+        Switch: {
+          railColorActive: '#126eb0',
+        },
       }
     }
-    return {}
+    else {
+      return {
+        common: {
+          // Общие стили для всех компонентов в светлой теме
+        },
+        Button: {
+          textColorHover: '#126eb0',
+          borderFocus: '2px solid #126eb0',
+          borderHover: '2px solid #126eb0',
+          borderPressedSuccess: '#126eb0',
+          textColorFocus: '#126eb0',
+          borderPressed: '2px solid #126eb0',
+          textColorPressed: '#126eb0',
+
+          // primary
+          colorPrimary: '#126eb0',
+          borderPrimary: 'transparent',
+          colorHoverPrimary: '#126eb0',
+          textColorHoverPrimary: '#fff',
+          colorFocusPrimary: '#126eb0',
+          borderFocusPrimary: '2px solid #126eb0',
+          borderHoverPrimary: '2px solid #126eb0',
+          borderFocusPrimaryPrimary: '#126eb0',
+          borderPressedSuccessPrimary: '#126eb0',
+          textColorFocusPrimary: '#fff',
+          borderPressedPrimary: '2px solid #126eb0',
+          textColorPressedPrimary: '#126eb0',
+
+          // text only
+          textColorTextPrimary: '#126eb0',
+          textColorTextHoverPrimary: '#126eb0',
+        },
+        Input: {
+          borderHover: '2px solid #126eb0',
+          borderFocus: '2px solid #126eb0',
+        },
+        Tabs: {
+          barColor: '#126eb0',
+          tabTextColorHoverLine: '#126eb0',
+          tabTextColorActiveLine: '#126eb0',
+        },
+        InternalSelection: {
+          borderHover: '2px solid #126eb0',
+          borderActive: '2px solid #126eb0',
+          borderFocus: '2px solid #126eb0',
+        },
+        InternalSelectMenu: {
+          optionTextColorActive: '#126eb0',
+          optionCheckColor: '#126eb0',
+        },
+        Slider: {
+          fillColor: '#126eb0',
+          fillColorHover: '#126eb0',
+        },
+        Switch: {
+          railColorActive: '#126eb0',
+        },
+      }
+    }
   })
 
   watch(
