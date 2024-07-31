@@ -203,6 +203,7 @@ button.selected {
   transition: background-color .17s ease, border 0.17s ease;
 }
 
+
 @keyframes spinner {
   to {
     transform: rotate(360deg);
@@ -495,3 +496,4 @@ button.selected {
   width: unset;
   height: unset;
 }
+
