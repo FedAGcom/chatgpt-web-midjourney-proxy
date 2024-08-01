@@ -30,6 +30,11 @@ jobs:
           password: ${{ secrets.FEDAG_SSH_PASSWORD }}
           port: ${{ secrets.FEDAG_SSH_PORT }}
           script: |
+            cd /home
+            touch .env-suno
+            echo SESSION_ID=${{ secrets.SUNO__BASE_URL }} >> .env-suno
+            echo BASE_URL=${{ secrets.SUNO__SESSION_ID }} >> .env-suno
+            echo COOKIE=${{ secrets.SUNO__COOKIE }} >> .env-suno
             cd /../
             cd ${{ secrets.FEDAG_SSH_FOLDER }}
             docker compose down
