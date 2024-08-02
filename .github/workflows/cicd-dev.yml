@@ -36,11 +36,11 @@ jobs:
             echo BASE_URL=${{ secrets.SUNO__SESSION_ID }} >> .env-suno
             echo COOKIE=${{ secrets.SUNO__COOKIE }} >> .env-suno
             echo .env-proxy
-            echo mj.discord.guild-id=${{ PROXY__MJ_DISCORD_GUILD_ID }} >> .env-proxy
-            echo mj.discord.channel-id=${{ PROXY__MJ_DISCORD_CHANNEL_ID }} >> .env-proxy
-            echo mj.queue.timeout-minutes=${{ PROXY__MJ_QUEUE_TIMEOUT_MINUTES }} >> .env-proxy
-            echo mj.api-secret=${{ PROXY__MJ_API_SECRET }} >> .env-proxy
-            echo mj.discord.user-token=${{ PROXY__MJ_DISCORD_USER_TOKEN }} >> .env-proxy
+            echo mj.discord.guild-id=${{ secrets.PROXY__MJ_DISCORD_GUILD_ID }} >> .env-proxy
+            echo mj.discord.channel-id=${{ secrets.PROXY__MJ_DISCORD_CHANNEL_ID }} >> .env-proxy
+            echo mj.queue.timeout-minutes=${{ secrets.PROXY__MJ_QUEUE_TIMEOUT_MINUTES }} >> .env-proxy
+            echo mj.api-secret=${{ secrets.PROXY__MJ_API_SECRET }} >> .env-proxy
+            echo mj.discord.user-token=${{ secrets.PROXY__MJ_DISCORD_USER_TOKEN }} >> .env-proxy
             echo .env-chatgpt
             echo VITE_GLOB_API_URL=${{ secrets.CHATGPT__VITE_GLOB_API_URL }} >> .env-chatgpt
             echo VITE_APP_API_BASE_URL=${{ secrets.CHATGPT__VITE_APP_API_BASE_URL }} >> .env-chatgpt
