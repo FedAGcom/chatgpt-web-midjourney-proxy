@@ -27,6 +27,8 @@ const { iconRender } = useIconRender()
 const route = useRoute()
 const chatStore = useChatStore()
 
+const isMJ = chatStore.getChatHistoryByCurrentActive?.title.includes('--v')
+
 const userStore = useUserStore()
 
 const role = computed(() => userStore.userInfo.role)
@@ -263,7 +265,7 @@ watch(() => homeStore.myData.vtoken, regCookie)
         </div>
       </div>
       <div class="absolute bottom-0 right-0 z-1">
-        <NPopover trigger="hover">
+        <NPopover v-if="!isMJ" trigger="hover">
           <template #trigger>
             <NTag type="info" round size="small" style="cursor: pointer; " :bordered="false">
               <div class="opacity-60 flex">

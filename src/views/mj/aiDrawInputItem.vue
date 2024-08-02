@@ -324,6 +324,12 @@ const selectFile3 = (input: any) => {
         </template>
       </div>
     </section>
+    <div class="mb-4">
+      <NInput
+        v-model:value="st.text" type="textarea" :placeholder="$t('mjchat.prompt')" round clearable maxlength="2000" show-count class="custom-input"
+        :autosize="{ minRows: 2, maxRows: 5 }"
+      />
+    </div>
     <section v-for=" v in farr" class="mb-4 flex justify-between items-center">
       <div>{{ v.v }}</div>
       <NSelect v-model:value="f[v.k]" :options="drawlocalized[`${v.k}List`]" size="small" class="!w-[60%]" :clearable="true" />
@@ -358,12 +364,6 @@ const selectFile3 = (input: any) => {
       </NInput>
     </section>
 
-    <div class="mb-1">
-      <NInput
-        v-model:value="st.text" type="textarea" :placeholder="$t('mjchat.prompt')" round clearable maxlength="2000" show-count
-        :autosize="{ minRows: 2, maxRows: 5 }"
-      />
-    </div>
     <div class="mb-4 flex justify-between items-center">
       <div class="flex justify-start items-center flex-wrap">
         <div class="pt-1 pr-1 ">
@@ -462,7 +462,7 @@ const selectFile3 = (input: any) => {
         <div @click="copy2()"  >复制2</div>
     </div> -->
 
-    <ul v-if="!isMobile" class="pt-4" v-html="$t('mjchat.imginfo')" />
+    <!-- <ul v-if="!isMobile" class="pt-4" v-html="$t('mjchat.imginfo')" /> -->
   </div>
 </template>
 
@@ -471,4 +471,9 @@ const selectFile3 = (input: any) => {
         border-color:#86dfba ;
 
     }
+
+  .custom-input {
+    height: 100px;
+    padding-bottom: 20px;
+  }
 </style>
