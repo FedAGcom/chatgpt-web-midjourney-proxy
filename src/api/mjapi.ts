@@ -16,6 +16,7 @@ export interface gptsType {
 // const { addChat, updateChat, updateChatSome, getChatByUuidAndIndex } = useChat()
 export function upImg(file: any): Promise<any> {
   const maxSize = homeStore.myData.session.uploadImgSize ? (+homeStore.myData.session.uploadImgSize) : 1
+  console.log('homeStore.myData.session.uploadImgSize', homeStore)
   return new Promise((h, r) => {
     const filename = file.name
     if (file.size > (1024 * 1024 * maxSize)) {
@@ -325,11 +326,14 @@ export const getSeed = async (cchat: Chat.Chat, message: any) => {
   if (!cchat.mjID)
     return
   let seed = 0
+
   if (cchat.opt?.seed) { seed = cchat.opt?.seed }
   else {
     try {
-      message.info('获取中...')
+      // message.info('获取中...')
+      message.info('Получение...')
       const res: any = await mjSeed(cchat.mjID)
+      console.log('res', res)
       seed = res.result
       if (seed > 0) {
         if (cchat.opt) {
@@ -341,7 +345,8 @@ export const getSeed = async (cchat: Chat.Chat, message: any) => {
       }
     }
     catch (e) {
-      message.error('获取失败')
+      // message.error('获取失败')
+      message.error('Попытка приобретения не удалась')
     }
   }
   mlog('getSeed', seed)
