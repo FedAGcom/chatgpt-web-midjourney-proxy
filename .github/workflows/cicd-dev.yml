@@ -31,17 +31,23 @@ jobs:
           port: ${{ secrets.FEDAG_SSH_PORT }}
           script: |
             cd /home
+            cp .env-suno .env-suno-old
+            rm .env-suno
             touch .env-suno
             echo SESSION_ID=${{ secrets.SUNO__BASE_URL }} >> .env-suno
             echo BASE_URL=${{ secrets.SUNO__SESSION_ID }} >> .env-suno
             echo COOKIE=${{ secrets.SUNO__COOKIE }} >> .env-suno
-            echo .env-proxy
+            cp .env-proxy .env-proxy-old
+            rm .env-proxy
+            touch .env-proxy
             echo mj.discord.guild-id=${{ secrets.PROXY__MJ_DISCORD_GUILD_ID }} >> .env-proxy
             echo mj.discord.channel-id=${{ secrets.PROXY__MJ_DISCORD_CHANNEL_ID }} >> .env-proxy
             echo mj.queue.timeout-minutes=${{ secrets.PROXY__MJ_QUEUE_TIMEOUT_MINUTES }} >> .env-proxy
             echo mj.api-secret=${{ secrets.PROXY__MJ_API_SECRET }} >> .env-proxy
             echo mj.discord.user-token=${{ secrets.PROXY__MJ_DISCORD_USER_TOKEN }} >> .env-proxy
-            echo .env-chatgpt
+            cp .env-chatgpt .env-chatgpt-old
+            rm .env-chatgpt
+            touch .env-chatgpt
             echo VITE_GLOB_API_URL=${{ secrets.CHATGPT__VITE_GLOB_API_URL }} >> .env-chatgpt
             echo VITE_APP_API_BASE_URL=${{ secrets.CHATGPT__VITE_APP_API_BASE_URL }} >> .env-chatgpt
             echo VITE_GLOB_OPEN_LONG_REPLY=${{ secrets.CHATGPT__VITE_GLOB_OPEN_LONG_REPLY }} >> .env-chatgpt
@@ -52,7 +58,7 @@ jobs:
             echo OPENAI_API_MODEL=${{ secrets.CHATGPT__OPENAI_API_MODEL }} >> .env-chatgpt
             echo OPENAI_API_DISABLE_DEBUG= >> .env-chatgpt
             echo API_REVERSE_PROXY= >> .env-chatgpt
-            echo TIMEOUT_MS=${{ secrets.CHATGPT__TIMEOUT_MS }} >> .env-chatgpt 
+            echo TIMEOUT_MS=${{ secrets.CHATGPT__TIMEOUT_MS }} >> .env-chatgpt
             echo MAX_REQUEST_PER_HOUR= >> .env-chatgpt
             echo AUTH_SECRET_KEY= >> .env-chatgpt
             echo AUTH_SECRET_ERROR_COUNT= >> .env-chatgpt
@@ -70,7 +76,7 @@ jobs:
             echo TJ_BAIDU_ID= >> .env-chatgpt
             echo TJ_GOOGLE_ID= >> .env-chatgpt
             echo SYS_NOTIFY= >> .env-chatgpt
-            echo FILE_SERVER= >> .env-chatgpt 
+            echo FILE_SERVER= >> .env-chatgpt
             echo DISABLE_GPT4= >> .env-chatgpt
             echo R2_DOMAIN= >> .env-chatgpt
             echo R2_BUCKET_NAME= >> .env-chatgpt
@@ -95,4 +101,3 @@ jobs:
             docker compose down
             docker rmi ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
             docker compose up -d
-      
