@@ -3,6 +3,7 @@ export default {
     add: 'Add',
     addSuccess: 'Add Success',
     edit: 'Edit',
+    use: 'Use',
     editSuccess: 'Edit Success',
     delete: 'Delete',
     deleteSuccess: 'Delete Success',

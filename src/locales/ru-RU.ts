@@ -3,6 +3,7 @@ export default {
     add: 'Добавить',
     addSuccess: 'Добавлено успешно',
     edit: 'Редактировать',
+    use: 'Использовать',
     editSuccess: 'Изменено успешно',
     delete: 'Удалить',
     deleteSuccess: 'Удалено успешно',

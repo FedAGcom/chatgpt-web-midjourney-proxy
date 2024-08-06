@@ -34,8 +34,9 @@ const userStore = useUserStore()
 const role = computed(() => userStore.userInfo.role)
 
 const fsRef = ref()
-const st = ref<{ fileBase64: string[];isLoad: number;isShow: boolean;showMic: boolean;micStart: boolean }>({
+const st = ref<{ fileBase64: string[]; fileNames: string[]; isLoad: number;isShow: boolean;showMic: boolean;micStart: boolean }>({
   fileBase64: [],
+  fileNames: [],
   isLoad: 0,
   isShow: false,
   showMic: false,
@@ -116,6 +117,7 @@ const upFile = (file: any) => {
           return
         }
         st.value.fileBase64.push(d)
+        st.value.fileNames.push(file.name)
       }).catch(e => ms.error(e))
     }
   }
@@ -134,6 +136,7 @@ const upFile = (file: any) => {
           st.value.fileBase64.push(r.url)
         else
           st.value.fileBase64.push(location.origin + r.url)
+        st.value.fileNames.push(file.name)
       }
       else if (r.error) { ms.error(r.error) }
     }).catch((e) => {
@@ -256,8 +259,11 @@ watch(() => homeStore.myData.vtoken, regCookie)
         <div v-for="(v, ii) in st.fileBase64" class="w-[60px] h-[60px] rounded-sm bg-slate-50 mr-1 mt-1 text-red-300 relative group">
           <NImage :src="v" object-fit="cover" class="w-full h-full">
             <template #placeholder>
-              <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="v" target="_blank">
-                <SvgIcon icon="mdi:download" />{{ $t('mj.attr1') }} {{ ii + 1 }}
+              <a class="w-full h-full flex items-center justify-center  text-neutral-500">
+                <!-- <SvgIcon icon="mdi:download" /> -->
+                <div style="font-size: 12px; max-width: 60px; max-height: 60px; word-break: break-all; overflow: hidden;">
+                  {{ `${st.fileNames[ii]?.split('.')[0].slice(0, 12)}... .${st.fileNames[ii]?.split('.')[1]}` }}
+                </div>
               </a>
             </template>
           </NImage>
@@ -299,8 +305,8 @@ watch(() => homeStore.myData.vtoken, regCookie)
             <div class=" relative; w-[22px]">
               <NTooltip trigger="hover">
                 <template #trigger>
-                  <SvgIcon v-if="st.isLoad == 1" icon="line-md:uploading-loop" class="absolute bottom-[10px] left-[8px] cursor-pointer" />
-                  <SvgIcon v-else icon="ri:attachment-line" class="absolute bottom-[10px] left-[8px] cursor-pointer" @click="fsRef.click()" />
+                  <SvgIcon v-if="st.isLoad == 1" icon="line-md:uploading-loop" class="absolute bottom-[26px] left-[8px] cursor-pointer" />
+                  <SvgIcon v-else icon="ri:attachment-line" class="absolute bottom-[26px] left-[8px] cursor-pointer" @click="fsRef.click()" />
                 </template>
                 <div v-if="canVisionModel(gptConfigStore.myData.model)" v-html="$t('mj.upPdf')" />
                 <div v-else v-html="$t('mj.upImg')" />
@@ -311,14 +317,14 @@ watch(() => homeStore.myData.vtoken, regCookie)
                 </div> -->
             <NDropdown trigger="hover" :options="drOption" @select="handleSelectASR">
               <div class=" relative; w-[22px]">
-                <div v-if="st.micStart" class="absolute bottom-[14px] left-[31px]">
+                <div v-if="st.micStart" class="absolute bottom-[26px] left-[31px]">
                   <span class="relative flex h-3 w-3">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-red-400" />
                   </span>
                 </div>
                 <!-- <SvgIcon icon="bi:mic"  class="absolute bottom-[10px] left-[55px] cursor-pointer" @click="goASR()"></SvgIcon> -->
-                <SvgIcon icon="bi:mic" class="absolute bottom-[10px] left-[30px] cursor-pointer" />
+                <SvgIcon icon="bi:mic" class="absolute bottom-[26px] left-[30px] cursor-pointer" />
               </div>
             </NDropdown>
           </template>
@@ -356,6 +362,6 @@ watch(() => homeStore.myData.vtoken, regCookie)
 <style>
 .myinputs .n-input .n-input-wrapper{
      @apply items-stretch;
-
+    height: 66px;
 }
 </style>

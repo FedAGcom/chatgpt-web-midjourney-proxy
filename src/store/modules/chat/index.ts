@@ -215,7 +215,7 @@ export const useChatStore = defineStore('chat-store', {
     setAvailiableModels(role: UserRole) {
       switch (role) {
         case UserRole.Admin:
-          this.avaliableModels = ['gpt-3.5-turbo-0301', 'gpt-4-turbo', 'gpt-4o', 'gpt-4-all', 'gpt-3.5-net', 'gpt-4-gizmo', 'gemini-1.5-pro-latest', 'gemini-1.5-flash', 'claude-3-Sonnet', 'claude-3-Haiku', 'claude-3-Opus']
+          this.avaliableModels = ['gpt-3.5-turbo-0301', 'gpt-4-turbo', 'gpt-4o', 'gpt-4-all', 'gpt-3.5-net', 'gpt-4-gizmo', 'gemini-1.5-pro-latest', 'gemini-1.5-flash', 'claude-3-Sonnet', 'claude-3-Haiku', 'claude-3-Opus', 'gemini-pro', 'gemini-pro-1.5']
           break
         case UserRole.Free:
           this.avaliableModels = ['gpt-3.5-turbo-0301']
