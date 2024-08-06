@@ -92,8 +92,14 @@ const generate= async ()=>{
 }
 
 </script>
+<style scoped>
+::v-deep .n-tabs-rail {
+  display: flex !important;
+  flex-direction: column;
+}
+</style>
 <template>
-<div class="p-2"> 
+<div class="p-4"> 
     <n-tabs type="segment" animated  v-model:value="st.type">
         <!-- <n-tab-pane name="start" tab=""> 
 
@@ -107,7 +113,7 @@ const generate= async ()=>{
                 </template>
                 </n-input>
             </div>
-            <div  class="pt-4 flex justify-between">
+            <div  class="pt-4 pb-4 flex-column">
                 <div>{{$t('suno.desc')}}:</div>
                 <div> 
                     <n-switch v-model:value="des.make_instrumental" size="small">
@@ -152,7 +158,7 @@ const generate= async ()=>{
                 </n-input>
             </div>
 
-            <div  class="pt-4 flex justify-between">
+            <div  class="pt-4 pb-4 flex-column">
                 <div>{{$t('suno.ly')}} :</div>
                 <div> 
                     <n-switch v-model:value="des.make_instrumental" size="small">
@@ -174,8 +180,8 @@ const generate= async ()=>{
     </n-tabs>
 
     <div class="pt-4">
-        <div class="flex justify-between items-start">
-            <div>
+        <div  class="pb-4 flex-column">
+            <div class="pb-4">
                   <NTag v-if="st.type=='custom'" type="success" size="small" round  ><span class="cursor-pointer" @click="generateLyrics()" >{{ $t('suno.generately') }}</span></NTag>
             </div>
             <NButton type="primary" :disabled="!canPost" @click="generate()"><SvgIcon icon="ri:music-fill"  /> {{$t('suno.generate')}}</NButton> 
