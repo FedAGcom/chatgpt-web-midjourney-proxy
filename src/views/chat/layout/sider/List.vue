@@ -84,7 +84,7 @@ watch(() => gptConfigStore.myData, toMyuid, { deep: true })
       <template v-if="!dataSources.length">
         <div class="flex flex-col items-center mt-4 text-center text-neutral-300">
           <SvgIcon icon="ri:inbox-line" class="mb-2 text-3xl" />
-          <span>{{ $t('common.noData') }}</span>
+          <!-- <span>{{ $t('common.noData') }}</span> -->
         </div>
       </template>
       <template v-else>

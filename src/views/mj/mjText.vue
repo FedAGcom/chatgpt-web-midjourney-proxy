@@ -302,7 +302,8 @@ load()
         </NButton>
       </div>
       <div v-else-if="chat.opt.progress" class="py-2 min-w-[200px]">
-        {{ $t('mjchat.progress') }}{{ chat.opt.progress }}
+        <!-- {{ $t('mjchat.progress') }}{{ chat.opt.progress }} -->
+        {{ $t('mjchat.wait4') }}
       </div>
       <div v-else class="py-2">
         {{ $t('mjchat.wait') }}
@@ -310,7 +311,8 @@ load()
       <!-- <div v-html="chat.opt?.action"></div> -->
     </template>
     <div v-else>
-      {{ $t('mjchat.wait2', { id: chat.mjID }) }}
+      <!-- {{ $t('mjchat.wait2', { id: chat.mjID }) }} -->
+      {{ $t('mjchat.wait4', { id: chat.mjID }) }}
       <div v-if="!chat.loading">
         <NButton type="primary" @click="reload()">
           {{ $t('mjchat.reload') }}
