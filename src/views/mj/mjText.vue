@@ -261,7 +261,7 @@ load()
             </template>
           </div>
         </template>
-        <template v-else-if="chat.opt?.action === 'UPSCALE' || 'DESCRIBE' === chat.opt?.action" />
+        <template v-else-if="chat.opt?.action === 'UPSCALE' || chat.opt?.action === 'DESCRIBE'" />
         <template v-else>
           <div class="flex space-x-2">
             <NButton type="primary" size="small" @click="sub('UPSCALE', 1)">

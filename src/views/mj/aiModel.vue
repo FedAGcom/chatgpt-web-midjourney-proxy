@@ -155,6 +155,7 @@ const reSet = () => {
 
 onMounted(() => {
   // gptConfigStore.myData= chatSet.getGptConfig();
+  console.log(role.value)
   chatStore.setAvailiableModels(role.value)
 })
 
