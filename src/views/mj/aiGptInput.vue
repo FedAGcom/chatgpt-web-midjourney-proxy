@@ -235,9 +235,20 @@ const appearance = computed(() => {
 })
 const tRef = ref()
 // const vt= ref<{thandel?:any}>({ });
+const hideTurnstile = () => {
+  if (tRef.value)
+    tRef.value.$el.style.display = 'none'
+}
 onMounted(() => {
-  if (homeStore.myData.session.turnstile)
-    setTimeout(tRef.value.render, 4000)
+  // if (homeStore.myData.session.turnstile)
+  //   setTimeout(tRef.value.render, 4000)
+  if (homeStore.myData.session.turnstile) {
+    setTimeout(() => {
+      tRef.value.render()
+      if (homeStore.myData.vtoken)
+        hideTurnstile()
+    }, 4000)
+  }
   // vt.value.thandel= setInterval( tRef.value.reset , 8300)
 })
 // onUnmounted( ()=>{

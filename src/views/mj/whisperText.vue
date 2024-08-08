@@ -55,7 +55,7 @@ const download = () => {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(mybolb.value)
   // a.download ='ddaiai_'+ st.value.fileName ;//props.chat.model+'_' + (props.chat.opt?.lkey?.replace(/\:/ig,'-')) +'.mp3';
-  a.download = 'NeuroScribe_Voice'// props.chat.model+'_' + (props.chat.opt?.lkey?.replace(/\:/ig,'-')) +'.mp3';
+  a.download = 'NeuroScribe_Voice'
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)
@@ -73,7 +73,7 @@ load()
 
       <div class="flex justify-end items-center flex-1" @click="go">
         <span v-if="chat.opt && chat.opt?.duration " v-html="`${chat.opt?.duration.toFixed(2)}s`" />
-        <span v-else v-html="st.fileName" />
+        <!-- <span v-else v-html="st.fileName" /> -->
         <div class="cursor-pointer ml-2" @click="go">
           <SvgIcon v-if="st.isLoad == 1" icon="mdi:pause" />
           <SvgIcon v-else icon="mdi:play" />

@@ -66,6 +66,7 @@ const { promptList: promptTemplate } = storeToRefs<any>(promptStore)
 watch(() => promptStore.$state.activePrompt, (activePrompt) => {
   if (activePrompt?.length > 0)
     prompt.value = activePrompt
+  handleSubmit()
 })
 
 // 未知原因刷新页面，loading 状态不会重置，手动重置
