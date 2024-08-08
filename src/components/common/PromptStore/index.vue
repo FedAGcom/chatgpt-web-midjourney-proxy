@@ -287,6 +287,32 @@ const createColumns = (): DataTableColumns<DataProps> => {
       key: 'actions',
       width: 100,
       align: 'center',
+      // render(row) {
+      //   return h('div', { class: 'flex items-center flex-col gap-2' }, {
+      //     default: () => [
+      //       h(
+      //         NButton,
+      //         {
+      //           tertiary: true,
+      //           size: 'small',
+      //           type: 'info',
+      //           onClick: () => changeShowModal('modify', row),
+      //         },
+      //         { default: () => t('common.edit') },
+      //       ),
+      //       h(
+      //         NButton,
+      //         {
+      //           tertiary: true,
+      //           size: 'small',
+      //           type: 'error',
+      //           onClick: () => deletePromptTemplate(row),
+      //         },
+      //         { default: () => t('common.delete') },
+      //       ),
+      //     ],
+      //   })
+      // },
       render(row) {
         return h('div', { class: 'flex items-center flex-col gap-2' }, {
           default: () => [
@@ -296,19 +322,11 @@ const createColumns = (): DataTableColumns<DataProps> => {
                 tertiary: true,
                 size: 'small',
                 type: 'info',
-                onClick: () => changeShowModal('modify', row),
+                // onClick: () => changeShowModal('modify', row),
+                // onClick: () => setActivePrompt(row.renderValue),
+                onClick: () => setActivePrompt(row.renderValue),
               },
-              { default: () => t('common.edit') },
-            ),
-            h(
-              NButton,
-              {
-                tertiary: true,
-                size: 'small',
-                type: 'error',
-                onClick: () => deletePromptTemplate(row),
-              },
-              { default: () => t('common.delete') },
+              { default: () => t('common.use') },
             ),
           ],
         })
@@ -394,8 +412,9 @@ const dataSource = computed(() => {
         :data="dataSource"
         :pagination="pagination"
         :bordered="false"
-        :row-props="(row, index) => ({ onClick: () => setActivePrompt(row.renderValue) })"
       />
+      <!-- до того как была кнопка использовать -->
+      <!-- :row-props="(row, index) => ({ onClick: () => setActivePrompt(row.renderValue) })" -->
       <NList v-if="isMobile" style="max-height: 400px; overflow-y: auto;">
         <NListItem v-for="(item, index) of dataSource" :key="index">
           <NThing :title="item.renderKey" :description="item.renderValue" />

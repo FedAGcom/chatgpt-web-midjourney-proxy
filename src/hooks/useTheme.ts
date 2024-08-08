@@ -51,6 +51,14 @@ export function useTheme() {
           // text only
           textColorTextPrimary: '#126eb0',
           textColorTextHoverPrimary: '#126eb0',
+
+          // в диалогах
+          colorWarning: '#126eb0',
+          colorHoverWarning: '#126eb0',
+          textColorHoverWarning: '#fff',
+          borderWarning: '#126eb0',
+          borderHoverWarning: '1px solid #126eb0',
+          textColorGhostHover: '#126eb0',
         },
         Input: {
           borderHover: '2px solid #126eb0',
@@ -76,6 +84,12 @@ export function useTheme() {
         },
         Switch: {
           railColorActive: '#126eb0',
+        },
+        Dialog: {
+          iconColorWarning: '#126eb0',
+        },
+        Popconfirm: {
+          iconColor: '#126eb0',
         },
       }
     }
@@ -110,6 +124,14 @@ export function useTheme() {
           // text only
           textColorTextPrimary: '#126eb0',
           textColorTextHoverPrimary: '#126eb0',
+
+          // в диалогах
+          colorWarning: '#126eb0',
+          colorHoverWarning: '#126eb0',
+          textColorHoverWarning: '#fff',
+          borderWarning: '#126eb0',
+          borderHoverWarning: '1px solid #126eb0',
+          textColorGhostHover: '#126eb0',
         },
         Input: {
           borderHover: '2px solid #126eb0',
@@ -135,6 +157,12 @@ export function useTheme() {
         },
         Switch: {
           railColorActive: '#126eb0',
+        },
+        Dialog: {
+          iconColorWarning: '#126eb0',
+        },
+        Popconfirm: {
+          iconColor: '#126eb0',
         },
       }
     }

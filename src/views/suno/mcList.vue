@@ -81,7 +81,7 @@ initLoad()
             </template>
           </NImage>
           <div v-if="st.playid == item.id" class="absolute top-0 right-0 w-full h-full flex justify-center items-center">
-            <SvgIcon v-if="sp.status == 'pause'" icon="mdi:pause-circle-outline" class="text-[40px] text-[#fff]" />
+            <SvgIcon v-if="sp.status !== 'pause'" icon="mdi:pause-circle-outline" class="text-[40px] text-[#fff]" />
             <SvgIcon v-else icon="mdi:play-circle-outline" class="text-[40px] text-[#fff]" />
           </div>
         </template>
