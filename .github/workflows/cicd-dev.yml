@@ -1,0 +1,103 @@
+name: cicd for dev
+
+on:
+  push:
+    branches: ['develop']
+env:
+  IMAGE_NAME: chatgpt-web-midjourney-proxy
+  IMAGE_TAG: dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: develop
+      - name: Build and push the image
+        run: |
+          docker login --username deniel369 --password ${{ secrets.FEDAG_TOKEN }} ghcr.io
+          docker build . --tag ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      - name: executing remote ssh commands 
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FEDAG_SSH_HOST }}
+          username: ${{ secrets.FEDAG_SSH_USER }}
+          password: ${{ secrets.FEDAG_SSH_PASSWORD }}
+          port: ${{ secrets.FEDAG_SSH_PORT }}
+          script: |
+            cd /home
+            cp .env-suno .env-suno-old
+            rm .env-suno
+            touch .env-suno
+            echo SESSION_ID=${{ secrets.SUNO__BASE_URL }} >> .env-suno
+            echo BASE_URL=${{ secrets.SUNO__SESSION_ID }} >> .env-suno
+            echo COOKIE=${{ secrets.SUNO__COOKIE }} >> .env-suno
+            cp .env-proxy .env-proxy-old
+            rm .env-proxy
+            touch .env-proxy
+            echo mj.discord.guild-id=${{ secrets.PROXY__MJ_DISCORD_GUILD_ID }} >> .env-proxy
+            echo mj.discord.channel-id=${{ secrets.PROXY__MJ_DISCORD_CHANNEL_ID }} >> .env-proxy
+            echo mj.queue.timeout-minutes=${{ secrets.PROXY__MJ_QUEUE_TIMEOUT_MINUTES }} >> .env-proxy
+            echo mj.api-secret=${{ secrets.PROXY__MJ_API_SECRET }} >> .env-proxy
+            echo mj.discord.user-token=${{ secrets.PROXY__MJ_DISCORD_USER_TOKEN }} >> .env-proxy
+            cp .env-chatgpt .env-chatgpt-old
+            rm .env-chatgpt
+            touch .env-chatgpt
+            echo VITE_GLOB_API_URL=${{ secrets.CHATGPT__VITE_GLOB_API_URL }} >> .env-chatgpt
+            echo VITE_APP_API_BASE_URL=${{ secrets.CHATGPT__VITE_APP_API_BASE_URL }} >> .env-chatgpt
+            echo VITE_GLOB_OPEN_LONG_REPLY=${{ secrets.CHATGPT__VITE_GLOB_OPEN_LONG_REPLY }} >> .env-chatgpt
+            echo VITE_GLOB_APP_PWA=${{ secrets.CHATGPT__VITE_GLOB_APP_PWA }} >> .env-chatgpt
+            echo OPENAI_API_KEY=${{ secrets.CHATGPT__OPENAI_API_KEY }} >> .env-chatgpt
+            echo OPENAI_ACCESS_TOKEN=${{ secrets.CHATGPT__OPENAI_ACCESS_TOKEN}} >> .env-chatgpt
+            echo OPENAI_API_BASE_URL=${{ secrets.CHATGPT__OPENAI_API_BASE_URL }} >> .env-chatgpt
+            echo OPENAI_API_MODEL=${{ secrets.CHATGPT__OPENAI_API_MODEL }} >> .env-chatgpt
+            echo OPENAI_API_DISABLE_DEBUG= >> .env-chatgpt
+            echo API_REVERSE_PROXY= >> .env-chatgpt
+            echo TIMEOUT_MS=${{ secrets.CHATGPT__TIMEOUT_MS }} >> .env-chatgpt
+            echo MAX_REQUEST_PER_HOUR= >> .env-chatgpt
+            echo AUTH_SECRET_KEY= >> .env-chatgpt
+            echo AUTH_SECRET_ERROR_COUNT= >> .env-chatgpt
+            echo AUTH_SECRET_ERROR_TIME= >> .env-chatgpt
+            echo SOCKS_PROXY_HOST= >> .env-chatgpt
+            echo SOCKS_PROXY_PORT= >> .env-chatgpt
+            echo SOCKS_PROXY_USERNAME= >> .env-chatgpt
+            echo SOCKS_PROXY_PASSWORD= >> .env-chatgpt
+            echo HTTPS_PROXY= >> .env-chatgpt
+            echo MJ_SERVER=${{ secrets.CHATGPT__MJ_SERVER }} >> .env-chatgpt
+            echo MJ_API_SECRET=${{ secrets.CHATGPT__MJ_API_SECRET }} >> .env-chatgpt
+            echo API_UPLOADER=${{ secrets.CHATGPT__API_UPLOADER }} >> .env-chatgpt
+            echo HIDE_SERVER= >> .env-chatgpt
+            echo CUSTOM_MODELS=${{ secrets.CHATGPT__CUSTOM_MODELS }} >> .env-chatgpt
+            echo TJ_BAIDU_ID= >> .env-chatgpt
+            echo TJ_GOOGLE_ID= >> .env-chatgpt
+            echo SYS_NOTIFY= >> .env-chatgpt
+            echo FILE_SERVER= >> .env-chatgpt
+            echo DISABLE_GPT4= >> .env-chatgpt
+            echo R2_DOMAIN= >> .env-chatgpt
+            echo R2_BUCKET_NAME= >> .env-chatgpt
+            echo R2_ACCOUNT_ID= >> .env-chatgpt
+            echo R2_KEY_ID= >> .env-chatgpt
+            echo R2_KEY_SECRET= >> .env-chatgpt
+            echo UPLOAD_IMG_SIZE=${{ secrets.CHATGPT__UPLOAD_IMG_SIZE }} >> .env-chatgpt
+            echo GPT_URL= >> .env-chatgpt
+            echo SYS_THEME=${{ secrets.CHATGPT__SYS_THEME }} >> .env-chatgpt
+            echo CLOSE_MD_PREVIEW= >> .env-chatgpt
+            echo UPLOAD_TYPE= >> .env-chatgpt
+            echo TURNSTILE_SITE=${{ secrets.CHATGPT__TURNSTILE_SITE }} >> .env-chatgpt
+            echo TURNSTILE_SECRET_KEY=${{ secrets.CHATGPT__TURNSTILE_SECRET_KEY }} >> .env-chatgpt
+            echo SUNO_SERVER=${{ secrets.CHATGPT__SUNO_SERVER }} >> .env-chatgpt
+            echo SUNO_KEY=${{ secrets.CHATGPT__SUNO_KEY }} >> .env-chatgpt
+            echo MENU_DISABLE= >> .env-chatgpt
+            echo VISION_MODEL=${{ secrets.CHATGPT__VISION_MODEL }} >> .env-chatgpt
+            echo CUSTOM_VISION_MODELS=${{ secrets.CHATGPT__CUSTOM_VISION_MODELS }} >> .env-chatgpt
+            echo SYSTEM_MESSAGE=${{ secrets.CHATGPT__SYSTEM_MESSAGE }} >> .env-chatgpt
+            cd /../
+            cd ${{ secrets.FEDAG_SSH_FOLDER }}
+            docker compose down
+            docker rmi ghcr.io/fedagcom/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            docker compose up -d
