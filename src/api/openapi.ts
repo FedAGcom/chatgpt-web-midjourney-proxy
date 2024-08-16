@@ -217,7 +217,8 @@ export const subGPT = async (data: any, chat: Chat.Chat) => {
     const d = await gptFetch('/v1/images/generations', data.data)
     try {
       const rz: any = d.data[0]
-      chat.text = rz.revised_prompt ?? '图片已完成'
+      // chat.text = rz.revised_prompt ?? '图片已完成'
+      chat.text = rz.revised_prompt ?? 'Генерация завершена'
       chat.opt = { imageUrl: rz.url }
       chat.loading = false
       homeStore.setMyData({ act: 'updateChat', actData: chat })

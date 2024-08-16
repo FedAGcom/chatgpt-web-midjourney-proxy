@@ -146,6 +146,7 @@ export default {
 
     tokenInfo1: 'Remaining Tokens = Model Length - Role Setting - Context (Conversation History) - Replies Count - Current Input',
     tokenInfo2: 'Leave the role setting blank, and the system will provide a default one.',
+    improveModel: 'Improve model',
     noSuppertModel: 'Refresh, this model is not currently supported!',
     failOcr: 'Recognition failed',
     remain: 'Remain:',
@@ -290,6 +291,7 @@ export default {
     tVersion: 'Model Version',
     dalleInfo: 'Note:<li>1. DALL-E is an image generation model provided by OpenAI</li><li>2. OpenAI images have an expiration date, so make backups</li><li>3. Note: The price of 1790px images is double</li>',
     version: 'Version',
+    dalleOptions: 'Options',
     size: 'Size',
     blendInfo: 'Note:<li>1. Blend at least 2 images</li><li>2. Up to 6 images can be used for blending</li>',
     blendStart: 'Start Blending',
