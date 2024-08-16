@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import {
-  NAutoComplete, NButton, NDropdown, NImage, NInput, NModal, NPopover
+  NAutoComplete, NButton, NDropdown, NImage, NInput, NPopover
   , NTag, NTooltip, useMessage,
 } from 'naive-ui'
 import type { AutoCompleteOptions } from 'naive-ui/es/auto-complete/src/interface'
@@ -9,6 +9,7 @@ import type { RenderLabel } from 'naive-ui/es/_internal/select-menu/src/interfac
 import { useRoute } from 'vue-router'
 import VueTurnstile from 'vue-turnstile'
 import AiMic from './aiMic.vue'
+import aiTariffs from './aiTariffs.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 import { SvgIcon } from '@/components/common'
@@ -17,7 +18,6 @@ import {
   , isFileMp3, mlog, regCookie, upImg,
 } from '@/api'
 import { gptConfigStore, homeStore, useChatStore, useUserStore } from '@/store'
-import aiModel from '@/views/mj/aiModel.vue'
 import { useIconRender } from '@/hooks/useIconRender'
 
 const props = defineProps<{ modelValue: string;disabled?: boolean;searchOptions?: AutoCompleteOptions;renderOption?: RenderLabel }>()
@@ -254,6 +254,12 @@ onMounted(() => {
 // onUnmounted( ()=>{
 //     if(vt.value.thandel) clearInterval( vt.value.thandel)
 // });
+// watch(() => homeStore.myData.vtoken, (newToken) => {
+//   if (newToken) {
+//     regCookie(newToken)
+//     hideTurnstile()
+//   }
+// })
 watch(() => homeStore.myData.vtoken, regCookie)
 </script>
 
@@ -295,7 +301,7 @@ watch(() => homeStore.myData.vtoken, regCookie)
             <p class="py-1" v-text="$t('mj.tokenInfo2')" />
             <p class=" text-right">
               <NButton type="info" size="small" @click="st.isShow = true">
-                {{ $t('setting.setting') }}
+                {{ $t('mj.improveModel') }}
               </NButton>
             </p>
           </div>
@@ -359,9 +365,7 @@ watch(() => homeStore.myData.vtoken, regCookie)
     <!-- translate-y-[-8px]       -->
   </div>
 
-  <NModal v-model:show="st.isShow" preset="card" :title="$t('mjchat.modelChange')" class="!max-w-[620px]" @close="st.isShow = false">
-    <aiModel @close="st.isShow = false" />
-  </NModal>
+  <aiTariffs v-model:visible="st.isShow" />
 
 <!-- <n-drawer v-model:show="st.showMic" :width="420" :on-update:show="onShowFun">
     <n-drawer-content title="录音" closable>
