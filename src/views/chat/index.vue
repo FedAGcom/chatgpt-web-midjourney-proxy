@@ -475,6 +475,10 @@ function handleEdit(index: number) {
   })
 }
 
+function hadleAddAttachmentName(index: number) {
+  updateChatSome(+uuid, index, { attachmentName: 'adsd' })
+}
+
 function handleClear() {
   if (loading.value)
     return
@@ -616,13 +620,17 @@ onUnmounted(() => {
 })
 
 const local = computed(() => homeStore.myData.local)
+
 watch(() => homeStore.myData.act, (n) => {
   if (n == 'draw')
     scrollToBottom()
+  scrollToBottomIfAtBottom()
   if (n == 'scrollToBottom')
     scrollToBottom()
+  scrollToBottomIfAtBottom()
   if (n == 'scrollToBottomIfAtBottom')
-    scrollToBottomIfAtBottom()
+    scrollToBottom()
+  scrollToBottomIfAtBottom()
   if (n == 'gpt.submit' || n == 'gpt.resubmit') {
     loading.value = true
     if (chatStore.active) {
@@ -700,6 +708,7 @@ const defaultAvatar = computed(() => theme.value === 'dark'
                 @regenerate="onRegenerate(index)"
                 @delete="handleDelete(index)"
                 @edit="handleEdit(index)"
+                @addAttachmentName="hadleAddAttachmentName(index)"
               />
               <!-- <Message
                 v-if="ychat.text"

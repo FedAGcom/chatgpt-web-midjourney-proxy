@@ -16,11 +16,21 @@ const props = defineProps<Props>()
 const { isMobile } = useBasicLayout()
 const ms = useMessage()
 const st = ref({ isLoadImg: false, uri_base64: '', bts: [], isShow: false, isCustom: false, customText: '' })
+const upscalingSt = ref(false)
 
 const reload = () => {
   flechTask(chat.value)
 }
 const sub = (type: string, index: number) => {
+  upscalingSt.value = true
+  console.log('st после изменения на true', upscalingSt.value)
+
+  // Через 5 секунд меняем состояние обратно на false
+  setTimeout(() => {
+    upscalingSt.value = false
+    console.log('st после изменения на false', upscalingSt.value)
+  }, 5000)
+
   const text = `${chat.value.opt?.promptEn} ${type} ${index}`
   const obj = {
     action: 'change',
@@ -303,6 +313,7 @@ load()
       </div>
       <div v-else-if="chat.opt.progress" class="py-2 min-w-[200px]">
         <!-- {{ $t('mjchat.progress') }}{{ chat.opt.progress }} -->
+        <!-- {{ st.isImageUpscaling ? 'Ваше изображение увеличивается...' : $t('mjchat.wait4') }} -->
         {{ $t('mjchat.wait4') }}
       </div>
       <div v-else class="py-2">
@@ -313,6 +324,7 @@ load()
     <div v-else>
       <!-- {{ $t('mjchat.wait2', { id: chat.mjID }) }} -->
       {{ $t('mjchat.wait4', { id: chat.mjID }) }}
+      <!-- {{ upscalingSt ? 'Ваше изображение увеличивается...' : $t('mjchat.wait4') }} -->
       <div v-if="!chat.loading">
         <NButton type="primary" @click="reload()">
           {{ $t('mjchat.reload') }}

@@ -53,7 +53,18 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 
+const updateAttachmentHistory = () => {
+  const addedFiles = JSON.parse(localStorage.getItem('attachmentHistory') || '[]')
+  if (Array.isArray(addedFiles?.[0]))
+    addedFiles?.shift()
+
+  const mergedFiles = [addedFiles]
+  localStorage.setItem('attachmentHistory', JSON.stringify(mergedFiles))
+}
+
 const handleSubmit = () => {
+  updateAttachmentHistory()
+
   if (mvalue.value == '')
     return
   if (checkDisableGpt4(gptConfigStore.myData.model)) {
@@ -95,6 +106,16 @@ watch(() => dataSources.value, funt)
 watch(() => gptConfigStore.myData, funt, { deep: true })
 watch(() => homeStore.myData.isLoader, funt, { deep: true })
 funt()
+
+const setAttachmentHistory = (file: any) => {
+  if (file) {
+    const addedFiles = JSON.parse(localStorage.getItem('attachmentHistory') || '[]')
+
+    addedFiles.push(file.name)
+
+    localStorage.setItem('attachmentHistory', JSON.stringify(addedFiles))
+  }
+}
 
 const upFile = (file: any) => {
   if (!canVisionModel(gptConfigStore.myData.model)) {
@@ -144,6 +165,7 @@ const upFile = (file: any) => {
       ms.error(t('mj.uploadFail') + (e.message ?? JSON.stringify(e)))
     })
   }
+  setAttachmentHistory(file)
 }
 
 function handleEnter(event: KeyboardEvent) {

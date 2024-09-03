@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it'
 import mdKatex from '@traptitech/markdown-it-katex'
 import mila from 'markdown-it-link-attributes'
 import hljs from 'highlight.js'
+import { NButton } from 'naive-ui'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 import { copyToClip } from '@/utils/copy'
@@ -16,6 +17,7 @@ import MjTextAttr from '@/views/mj/mjTextAttr.vue'
 import aiTextSetting from '@/views/mj/aiTextSetting.vue'
 import aiSetAuth from '@/views/mj/aiSetAuth.vue'
 import { isApikeyError, isAuthSessionError, isTTS } from '@/api'
+import { useChatStore } from '@/store'
 
 interface Props {
   inversion?: boolean
@@ -31,6 +33,10 @@ const props = defineProps<Props>()
 const { isMobile } = useBasicLayout()
 
 const textRef = ref<HTMLElement>()
+
+const chatStore = useChatStore()
+
+const isMJ = chatStore.getChatHistoryByCurrentActive?.title.includes('--v')
 
 const mdi = new MarkdownIt({
   html: false,
@@ -108,6 +114,27 @@ function removeCopyEvents() {
   }
 }
 
+function downloadImage(imageUrl: string | undefined) {
+  if (imageUrl) {
+    fetch(imageUrl)
+      .then(response => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `${props?.chat?.opt?.promptEn}.png` || 'image.png'
+
+        document.body.appendChild(link)
+        link.click()
+
+        link.remove()
+        window.URL.revokeObjectURL(url)
+      })
+      .catch(error => console.error('Ошибка при скачивании изображения:', error))
+  }
+}
+
 onMounted(() => {
   addCopyEvents()
 })
@@ -127,20 +154,24 @@ onUnmounted(() => {
       <div v-if="!inversion">
         <aiTextSetting v-if="!inversion && isApikeyError(text)" />
         <aiSetAuth v-if="!inversion && isAuthSessionError(text)" />
-
         <dallText v-if="chat.model == 'dall-e-3' || chat.model == 'dall-e-2'" :chat="chat" class="whitespace-pre-wrap" />
         <mjText v-if="chat.mjID" class="whitespace-pre-wrap" :chat="chat" :mdi="mdi" />
         <ttsText v-else-if="chat.model && isTTS(chat.model) && chat.text == 'ok'" :chat="chat" />
+
         <template v-else>
           <div v-if="!asRawText" class="markdown-body" :class="{ 'markdown-body-generate': loading }" v-html="text" />
           <div v-else class="whitespace-pre-wrap" v-text="text" />
         </template>
+        <NButton block style="margin-top: 20px;" @click="downloadImage(chat.opt?.imageUrl)">
+          {{ $t('store.downloadImage') }}
+        </NButton>
       </div>
       <whisperText v-else-if="text == 'whisper' && chat.opt?.lkey " :chat="chat" />
       <div v-else-if="asRawText" class="whitespace-pre-wrap" v-text="text" />
       <div v-else class="markdown-body " style="--color-fg-default:#24292f" v-html="text" />
       <!-- <div v-else class="whitespace-pre-wrap" v-text="text" /> -->
       <MjTextAttr v-if="chat.opt?.images" :image="chat.opt?.images[0]" />
+
       <whisperText v-if="chat.model && chat.model.indexOf('whisper') > -1 && chat.opt?.lkey " :is-w="true" :chat="chat" class="w-full" />
       <ttsText v-if="!inversion && chat.opt?.duration && chat.opt?.duration > 0 && chat.opt?.lkey " :is-w="true" :chat="chat" class="w-full" />
     </div>

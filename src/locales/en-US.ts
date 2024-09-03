@@ -80,6 +80,7 @@ export default {
   },
   store: {
     siderButton: 'Prompt Store',
+    downloadImage: 'Скачать изображение',
     backToNeuroscribe: 'Back to neuroscribe',
     unavaliableModal: 'These models are only available on x x x tariffs. Click the button below to view and pay the tariff',
     goToRates: 'Перейти к тарифам',

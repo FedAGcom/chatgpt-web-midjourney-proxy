@@ -85,6 +85,7 @@ export default {
   store: {
     // siderButton: 'Хранилище подсказок',
     siderButton: 'База запросов к ИИ',
+    downloadImage: 'Скачать изображение',
     backToNeuroscribe: 'Вернуться в нейроскрайб',
     unavaliableModal: 'Эти модели доступны только на х х х тарифах. Нажмите кнопку ниже, чтобы ознакомиться и оплатить тариф',
     goToRates: 'Перейти к тарифам',
