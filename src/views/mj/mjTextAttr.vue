@@ -2,9 +2,18 @@
 import { ref } from 'vue'
 import { NImage } from 'naive-ui'
 import { localGet } from '@/api'
-import { SvgIcon } from '@/components/common'
 
 const pp = defineProps<{ image: string }>()
+// const addedFileName = localStorage.getItem('addedFile')
+const addedFileNames = ref<string[]>([])
+const getAddedFileNames = () => {
+  const storedFiles = JSON.parse(localStorage.getItem('attachmentHistory') || '[]')
+  addedFileNames.value = storedFiles.flat()
+}
+getAddedFileNames()
+if (addedFileNames.value?.length > 0)
+  localStorage.removeItem('addedFiles')
+
 const images = ref([])
 const load = () => {
   localGet(pp.image).then((r: any) => {
@@ -14,7 +23,6 @@ const load = () => {
       images.value = JSON.parse(r)
     }
   }).catch((e) => {})
-  console.log('pp.image', pp.image)
 }
 load()
 </script>
@@ -24,9 +32,11 @@ load()
     <div v-for="(img, k) of images" :key="k" class="p-1">
       <NImage :src="img" preview class=" rounded" :class="[images.length <= 1 ? 'w-[330px]' : 'w-[130px]']">
         <template #placeholder>
-          <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="img" target="_blank">
-            <SvgIcon icon="mdi:download" />{{ $t('mjchat.attr') }} {{ k + 1 }}
-          </a>
+          <!-- <a class="w-full h-full flex items-center justify-center  text-neutral-500" :href="img" target="_blank"> -->
+          <!-- <SvgIcon icon="mdi:download" />{{ $t('mjchat.attr') }} {{ k + 1 }} {{ addedFileNames[k] }} -->
+          <SvgIcon icon="mdi:download" /> {{ addedFileNames[k] }}
+
+          <!-- </a> -->
         </template>
       </NImage>
     </div>
