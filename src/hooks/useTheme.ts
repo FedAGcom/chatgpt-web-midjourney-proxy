@@ -34,6 +34,10 @@ export function useTheme() {
           borderPressed: '2px solid #126eb0',
           textColorPressed: '#126eb0',
 
+          // disabled
+          colorDisabledPrimary: '#126eb0',
+          borderDisabledPrimary: '1px solid #126eb0',
+
           // primary
           colorPrimary: '#126eb0',
           borderPrimary: 'transparent',
@@ -90,6 +94,18 @@ export function useTheme() {
         },
         Popconfirm: {
           iconColor: '#126eb0',
+        },
+        Tag: {
+          borderSuccess: '1px solid #126eb0',
+          textColorSuccess: '#126eb0',
+          colorSuccess: 'rgba(18, 110, 176, 0.1)',
+
+          // primary
+          colorPrimary: 'rgba(18, 110, 176, 0.1)',
+          textColorPrimary: '#126eb0',
+
+          // кол-во символов
+          // colorInfo: 'red',
         },
       }
     }
@@ -107,6 +123,10 @@ export function useTheme() {
           borderPressed: '2px solid #126eb0',
           textColorPressed: '#126eb0',
 
+          // disabled
+          colorDisabledPrimary: '#126eb0',
+          borderDisabledPrimary: '1px solid #126eb0',
+
           // primary
           colorPrimary: '#126eb0',
           borderPrimary: 'transparent',
@@ -163,6 +183,18 @@ export function useTheme() {
         },
         Popconfirm: {
           iconColor: '#126eb0',
+        },
+        Tag: {
+          borderSuccess: '1px solid #126eb0',
+          textColorSuccess: '#126eb0',
+          colorSuccess: 'rgba(18, 110, 176, 0.1)',
+
+          // primary
+          colorPrimary: 'rgba(18, 110, 176, 0.1)',
+          textColorPrimary: '#126eb0',
+
+          // кол-во символов
+          // colorInfo: 'red',
         },
       }
     }

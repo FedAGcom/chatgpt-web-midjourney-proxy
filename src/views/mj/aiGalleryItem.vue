@@ -11,7 +11,7 @@ import { NEmpty, NImage, NSpin, NTag } from 'naive-ui'
 import { homeStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 // import { ViewCard } from 'vue-waterfall-plugin-next/dist/types/types/waterfall'
-import { getMjAll, loadGallery, localGet, mlog, url2base64 } from '@/api'
+import { getDalleAll, getMjAll, loadGallery, localGet, mlog, url2base64 } from '@/api'
 
 const emit = defineEmits(['close'])
 
@@ -95,17 +95,121 @@ const loadApiGallery = async () => {
   list.value = rz.sort((a: any, b: any) => (b.time - a.time))
 }
 
+// const loadImagFormLocal = async () => {
+//   console.log('WORK')
+//   const d = await getMjAll(chatStore.$state)
+//   console.log('WORK1')
+//   if (!d || d.length == 0)
+//     return
+//   // mlog('loadImg', d );
+
+//   const rz = d.filter((v: any) => v.opt && v.opt.imageUrl).map((v: any) => {
+//     // mlog('vv', v.opt.imageUrl);
+//     // let key= 'img:'+v.mjID;
+//     //  let base64 = await loca(key );
+//     return {
+//       mjID: v.mjID,
+//       src: v.opt.imageUrl,
+//       isLoad: 0,
+//       prompt: v.opt.promptEn,
+//       image_url: v.opt.imageUrl,
+//       action: v.opt.action,
+//       time: v.opt.startTime,
+//     }
+//   })
+
+//   list.value = []
+//   for (const v of rz) {
+//     const key = `img:${v.mjID}`
+//     try {
+//       const base64 = await localGet(key)
+//       if (base64)
+//         v.image_url = base64
+//     }
+//     catch (e) { }
+//     list.value.push(v)
+//   }
+
+//   const dallePics = await getDalleAll(chatStore.$state)
+
+//   const dalleRz = dallePics.filter((v: any) => v.opt && v.opt.imageUrl).map((v: any) => {
+//     // mlog('vv', v.opt.imageUrl);
+//     // let key= 'img:'+v.mjID;
+//     //  let base64 = await loca(key );
+//     return {
+//       mjID: v.mjID,
+//       src: v.opt.imageUrl,
+//       isLoad: 0,
+//       prompt: v.opt.promptEn,
+//       image_url: v.opt.imageUrl,
+//       action: v.opt.action,
+//       time: v.opt.startTime,
+//     }
+//   })
+//   console.log('WORK2')
+
+//   list.value = []
+//   for (const v of dalleRz) {
+//     const key = `img:${v.mjID}`
+//     try {
+//       const base64 = await localGet(key)
+//       // console.log('base64', base64)
+//       // if (base64)
+
+//       // v.image_url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt'
+
+//       // v.image_url = v.src
+//       v.image_url = `http://localhost:3002/proxy-image?url=${encodeURIComponent(v.src)}`
+//     }
+//     catch (e) { }
+//     list.value.push(v)
+//   }
+
+//   list.value
+
+//   ajax({ url: '/chatgpt/mj/gallery' })
+//     .then((d) => {
+//       // st.value.style= d.data.style
+//       // st.value.example= d.data.example
+//       console.log(d)
+//       list.value = d.data.images.map((v: any) => {
+//         v.isLoad = 0
+//         return v
+//       })
+//     })
+// }
+
 const loadImagFormLocal = async () => {
+  const dallePics = await getDalleAll(chatStore.$state)
+
+  const dalleRz = dallePics.filter((v: any) => v.opt && v.opt.imageUrl).map((v: any) => {
+    return {
+      mjID: v.mjID,
+      src: v.opt.imageUrl,
+      isLoad: 0,
+      prompt: v.dallePicName,
+      image_url: v.opt.imageUrl,
+      action: v.opt.action,
+      time: v.dateTime,
+    }
+  })
+
+  list.value = []
+  for (const v of dalleRz) {
+    const key = `img:${v.mjID}`
+    try {
+      v.image_url = `http://localhost:3002/proxy-image?url=${encodeURIComponent(v.src)}`
+    }
+    catch (e) { }
+    list.value.push(v)
+  }
+
   const d = await getMjAll(chatStore.$state)
 
   if (!d || d.length == 0)
     return
-  // mlog('loadImg', d );
 
   const rz = d.filter((v: any) => v.opt && v.opt.imageUrl).map((v: any) => {
-    // mlog('vv', v.opt.imageUrl);
-    // let key= 'img:'+v.mjID;
-    //  let base64 = await loca(key );
     return {
       mjID: v.mjID,
       src: v.opt.imageUrl,
@@ -117,7 +221,6 @@ const loadImagFormLocal = async () => {
     }
   })
 
-  list.value = []
   for (const v of rz) {
     const key = `img:${v.mjID}`
     try {
@@ -128,60 +231,13 @@ const loadImagFormLocal = async () => {
     catch (e) { }
     list.value.push(v)
   }
-
-  // const dallePics = await getDalleAll(chatStore.$state)
-
-  // const dalleRz = dallePics.filter((v: any) => v.opt && v.opt.imageUrl).map((v: any) => {
-  //   // mlog('vv', v.opt.imageUrl);
-  //   // let key= 'img:'+v.mjID;
-  //   //  let base64 = await loca(key );
-  //   return {
-  //     mjID: v.mjID,
-  //     src: v.opt.imageUrl,
-  //     isLoad: 0,
-  //     prompt: v.opt.promptEn,
-  //     image_url: v.opt.imageUrl,
-  //     action: v.opt.action,
-  //     time: v.opt.startTime,
-  //   }
-  // })
-
-  // list.value = []
-  // for (const v of dalleRz) {
-  //   const key = `img:${v.mjID}`
-  //   try {
-  //     const base64 = await localGet(key)
-  //     // console.log('base64', base64)
-  //     // if (base64)
-
-  //     // v.image_url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt'
-  //     v.image_url = v.src
-  //   }
-  //   catch (e) { }
-  //   list.value.push(v)
-  // }
-
-  // list.value
-
-  // ajax({  url: '/chatgpt/mj/gallery' })
-  //     .then((d) => {
-  //         // st.value.style= d.data.style
-  //         // st.value.example= d.data.example
-  //         console.log(d)
-  //         list.value= d.data.images.map((v:any)=>{
-  //             v.isLoad=0
-  //             return  v;
-  //         })
-  //     } )
 }
 
 const goShow = (item: any) => {
-  // console.log('goShow', isMobile );
   if (isMobile.value)
     return
   st.value.show = true
   st.value.showImg = item.image_url
-  // console.log('goShow', item);
   nextTick(() => showImg.value?.click())
 }
 // function copy( item:any){
@@ -190,7 +246,6 @@ const goShow = (item: any) => {
 //   homeStore.setMyData({act:'copy',actData: {text: item.prompt } });
 // 	//copyToClip(  item.prompt ).then(()=>msgRef.value.showMsg('复制成功！'));
 // }
-
 // 画同款
 const same = (item: any, act: string) => {
   // console.log('same',item);

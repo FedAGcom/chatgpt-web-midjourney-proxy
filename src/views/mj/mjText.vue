@@ -21,15 +21,15 @@ const upscalingSt = ref(false)
 const reload = () => {
   flechTask(chat.value)
 }
-const sub = (type: string, index: number) => {
+const changeUpscalingSt = () => {
   upscalingSt.value = true
-  console.log('st после изменения на true', upscalingSt.value)
 
-  // Через 5 секунд меняем состояние обратно на false
   setTimeout(() => {
     upscalingSt.value = false
-    console.log('st после изменения на false', upscalingSt.value)
   }, 5000)
+}
+const sub = (type: string, index: number) => {
+  changeUpscalingSt()
 
   const text = `${chat.value.opt?.promptEn} ${type} ${index}`
   const obj = {
@@ -323,8 +323,8 @@ load()
     </template>
     <div v-else>
       <!-- {{ $t('mjchat.wait2', { id: chat.mjID }) }} -->
-      {{ $t('mjchat.wait4', { id: chat.mjID }) }}
-      <!-- {{ upscalingSt ? 'Ваше изображение увеличивается...' : $t('mjchat.wait4') }} -->
+      <!-- {{ $t('mjchat.wait4', { id: chat.mjID }) }} -->
+      {{ upscalingSt ? 'Ваше изображение увеличивается...' : $t('mjchat.wait4') }}
       <div v-if="!chat.loading">
         <NButton type="primary" @click="reload()">
           {{ $t('mjchat.reload') }}

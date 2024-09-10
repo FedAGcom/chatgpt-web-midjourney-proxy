@@ -101,6 +101,7 @@ const funt = async () => {
   myToken.value = b
   return b
 }
+
 watch(() => mvalue.value, funt)
 watch(() => dataSources.value, funt)
 watch(() => gptConfigStore.myData, funt, { deep: true })
@@ -335,6 +336,7 @@ watch(() => homeStore.myData.vtoken, regCookie)
         <NInput
           ref="inputRef" v-model:value="mvalue" type="textarea"
           :placeholder="placeholder" :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
+          :disabled="myToken.remain === 0"
           @input="handleInput"
           @focus="handleFocus"
           @blur="handleBlur"

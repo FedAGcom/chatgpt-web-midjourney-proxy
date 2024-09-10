@@ -249,7 +249,8 @@ const downloadPromptTemplate = async () => {
 
 // 移动端自适应相关
 const renderTemplate = () => {
-  const [keyLimit, valueLimit] = isMobile.value ? [10, 30] : [15, 50]
+  // const [keyLimit, valueLimit] = isMobile.value ? [10, 30] : [15, 50]
+  const [keyLimit, valueLimit] = isMobile.value ? [10, 30] : [100, 100]
 
   return promptList.value.map((item: { key: string; value: string }) => {
     return {
@@ -324,7 +325,7 @@ const createColumns = (): DataTableColumns<DataProps> => {
                 type: 'info',
                 // onClick: () => changeShowModal('modify', row),
                 // onClick: () => setActivePrompt(row.renderValue),
-                onClick: () => setActivePrompt(row.renderValue),
+                onClick: () => setActivePrompt(row.value),
               },
               { default: () => t('common.use') },
             ),
