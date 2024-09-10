@@ -309,7 +309,7 @@ export const subModel = async (opt: subModelType) => {
     frequency_penalty = gStore.frequency_penalty ?? frequency_penalty
     max_tokens = gStore.max_tokens
   }
-  console.log('ADASAS', opt.model)
+
   if (model == 'gpt-4-vision-preview' && max_tokens > 2048)
     max_tokens = 2048
 
@@ -549,8 +549,11 @@ export const countTokensByRole = async (role: UserRole, dataSources: Chat.Chat[]
   const encodeChat = await encodeChatAsync()
   const msg = await getHistoryMessage(dataSources, 1)
   rz.history = msg.length == 0 ? 0 : encodeChat(msg, model.includes('gpt-4') ? 'gpt-4' : 'gpt-3.5-turbo').length
-  //
+
   rz.remain = unit * max - rz.history - rz.planOuter - rz.input - rz.system
+
+  if (rz.remain < 0)
+    rz.remain = 0
 
   return rz
 }

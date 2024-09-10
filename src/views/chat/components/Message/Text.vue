@@ -38,6 +38,8 @@ const chatStore = useChatStore()
 
 const isMJ = chatStore.getChatHistoryByCurrentActive?.title.includes('--v')
 
+const isShowDownloadBtn = Boolean(isMJ || props.chat.opt?.imageUrl)
+
 const mdi = new MarkdownIt({
   html: false,
   linkify: true,
@@ -116,7 +118,8 @@ function removeCopyEvents() {
 
 function downloadImage(imageUrl: string | undefined) {
   if (imageUrl) {
-    fetch(imageUrl)
+    const fullUrl = `http://localhost:3002/proxy-image?url=${encodeURIComponent(imageUrl)}`
+    fetch(fullUrl)
       .then(response => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(blob)
@@ -162,7 +165,7 @@ onUnmounted(() => {
           <div v-if="!asRawText" class="markdown-body" :class="{ 'markdown-body-generate': loading }" v-html="text" />
           <div v-else class="whitespace-pre-wrap" v-text="text" />
         </template>
-        <NButton block style="margin-top: 20px;" @click="downloadImage(chat.opt?.imageUrl)">
+        <NButton v-if="isShowDownloadBtn" block style="margin-top: 20px;" @click="downloadImage(chat.opt?.imageUrl)">
           {{ $t('store.downloadImage') }}
         </NButton>
       </div>

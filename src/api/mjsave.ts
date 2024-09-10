@@ -97,9 +97,11 @@ export const getDalleAll = async (ChatState: Chat.ChatState) => {
 
   ChatState.chat.forEach((v) => {
     // mlog('uid>>', v.uuid );
-    v.data.forEach((chat) => {
+    v.data.forEach((chat, index) => {
+      const prevName = v?.data?.[index - 1]?.requestOptions?.prompt
+
       if (chat.opt?.imageUrl)
-        rz.push(chat)
+        rz.push({ dallePicName: prevName, ...chat })
     })
   })
   return rz
