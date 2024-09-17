@@ -67,7 +67,13 @@ async function onConversation() {
   //     return
 
   controller = new AbortController()
-  if (message.action && message.action == 'face') {
+  if (message.action && message.action === 'gpt.flux') {
+    const promptMsg: Chat.Chat = getInitChat(message.drawText)
+    promptMsg.requestOptions.prompt = message?.data?.prompt
+    promptMsg.text = message?.data?.prompt
+    addChat(+uuid, promptMsg)
+  }
+  else if (message.action && message.action == 'face') {
     const promptMsg: Chat.Chat = getInitChat(t('mjchat.face')) // '换脸'
     try {
       const images = await localSaveAny(JSON.stringify([message.data.sourceBase64, message.data.targetBase64]))
@@ -136,7 +142,7 @@ async function onConversation() {
     requestOptions: { prompt: t('mjchat.wait4'), options: { ...options } },
     uuid: +uuid,
     myid: `${Date.now()}`,
-    model: message.action == 'gpt.dall-e-3' ? message.data.model : 'midjourney',
+    model: message.action == 'gpt.dall-e-3' ? message.data.model : (message.action === 'gpt.flux' ? 'flux' : 'midjourney'),
 
   }
   // mlog('outMsg model',outMsg.model );
@@ -225,7 +231,7 @@ watch(() => homeStore.myData.act, (n) => {
         homeStore.setMyData({ act: 'mjReload', actData: { mjID: dchat.mjID, noShow: true } })
         toBottom()
       }
-      else if ((dchat.model == 'dall-e-2' || dchat.model == 'dall-e-3') && dchat.opt?.imageUrl) {
+      else if ((dchat.model == 'dall-e-2' || dchat.model == 'dall-e-3' || dchat.model == 'flux') && dchat.opt?.imageUrl) {
         homeStore.setMyData({ act: 'dallReload', actData: { myid: dchat.myid, noShow: true } })
         toBottom()
       }

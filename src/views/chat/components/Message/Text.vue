@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, onUpdated, ref } from 'vue'
+import { computed, onMounted, onUnmounted, onUpdated, ref, watch } from 'vue'
 import MarkdownIt from 'markdown-it'
 import mdKatex from '@traptitech/markdown-it-katex'
 import mila from 'markdown-it-link-attributes'
@@ -36,9 +36,25 @@ const textRef = ref<HTMLElement>()
 
 const chatStore = useChatStore()
 
-const isMJ = chatStore.getChatHistoryByCurrentActive?.title.includes('--v')
+// const isMJ = chatStore.getChatHistoryByCurrentActive?.title.includes('--v') && !props.chat?.text.includes('error')
 
-const isShowDownloadBtn = Boolean(isMJ || props.chat.opt?.imageUrl)
+// const isShowDownloadBtn = Boolean(isMJ || props.chat.opt?.imageUrl)
+
+const isMJ = ref(false)
+const isShowDownloadBtn = ref(false)
+
+const updateFlags = () => {
+  isMJ.value = chatStore.getChatHistoryByCurrentActive?.title.includes('--v') && !props.chat?.text.includes('error')
+  isShowDownloadBtn.value = Boolean(isMJ.value || props.chat.opt?.imageUrl)
+}
+
+watch(
+  () => props.chat,
+  (newChat, oldChat) => {
+    updateFlags()
+  },
+  { immediate: true, deep: true },
+)
 
 const mdi = new MarkdownIt({
   html: false,
@@ -126,7 +142,7 @@ function downloadImage(imageUrl: string | undefined) {
 
         const link = document.createElement('a')
         link.href = url
-        link.download = `${props?.chat?.opt?.promptEn}.png` || 'image.png'
+        link.download = props?.chat?.opt?.imageName ? `${props?.chat?.opt?.imageName}.png` : 'image.png'
 
         document.body.appendChild(link)
         link.click()
@@ -157,7 +173,7 @@ onUnmounted(() => {
       <div v-if="!inversion">
         <aiTextSetting v-if="!inversion && isApikeyError(text)" />
         <aiSetAuth v-if="!inversion && isAuthSessionError(text)" />
-        <dallText v-if="chat.model == 'dall-e-3' || chat.model == 'dall-e-2'" :chat="chat" class="whitespace-pre-wrap" />
+        <dallText v-if="chat.model == 'dall-e-3' || chat.model == 'dall-e-2' || chat.model == 'flux'" :chat="chat" class="whitespace-pre-wrap" />
         <mjText v-if="chat.mjID" class="whitespace-pre-wrap" :chat="chat" :mdi="mdi" />
         <ttsText v-else-if="chat.model && isTTS(chat.model) && chat.text == 'ok'" :chat="chat" />
 
@@ -178,6 +194,7 @@ onUnmounted(() => {
       <whisperText v-if="chat.model && chat.model.indexOf('whisper') > -1 && chat.opt?.lkey " :is-w="true" :chat="chat" class="w-full" />
       <ttsText v-if="!inversion && chat.opt?.duration && chat.opt?.duration > 0 && chat.opt?.lkey " :is-w="true" :chat="chat" class="w-full" />
     </div>
+    <!-- <img :src="chat.opt?.imageUrl" alt="" style="width: 400px; height: 400px;"> -->
   </div>
 </template>
 
