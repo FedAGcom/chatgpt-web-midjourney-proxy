@@ -16,6 +16,7 @@ const load = async () => {
     return
   }
   const key = `dall:${chat.value.myid}`
+
   try {
     if (chat.value.opt?.imageUrl) {
       // await loadImg(chat.value.opt?.imageUrl);
@@ -45,6 +46,7 @@ watch(() => homeStore.myData.act, (n) => {
     // if( !actData.noShow ) ms.success('图片刷新成功！');
   }
 })
+
 load()
 </script>
 

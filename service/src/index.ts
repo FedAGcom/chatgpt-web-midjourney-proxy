@@ -10,6 +10,7 @@ import FormData from 'form-data'
 import axios from 'axios'
 import AWS from 'aws-sdk'
 import { v4 as uuidv4 } from 'uuid'
+import fetch from 'node-fetch'
 import pkg from '../package.json'
 import { formattedDate, isNotEmptyString } from './utils/is'
 import { auth, authV2, regCookie, turnstileCheck, verify } from './middleware/auth'
@@ -371,6 +372,61 @@ app.get('/proxy-image', async (req, res) => {
   }
   catch (error) {
     res.status(500).send('Failed to fetch image')
+  }
+})
+
+app.post('/proxy-flux-post', async (req, res) => {
+  const bodyObj = req.body
+
+  try {
+    const response = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-dev/predictions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        'Authorization': `Bearer ${process.env.FLUX_SECRET}`, // Ваш токен
+      },
+      body: JSON.stringify(bodyObj),
+    })
+
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Content-Type', response.headers.get('Content-Type'))
+
+    response.body.pipe(res)
+  }
+  catch (error) {
+    console.error('Failed to fetch from Replicate API:', error)
+    res.status(500).send('Failed to fetch from Replicate API')
+  }
+})
+
+app.get('/proxy-flux-get', async (req, res) => {
+  const imageUrl = req.query.url
+
+  if (!imageUrl)
+    return res.status(400).send('Image URL is required')
+
+  try {
+    const response = await axios({
+      url: imageUrl,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        'Authorization': `Bearer ${process.env.FLUX_SECRET}`,
+        'Accept': 'application/json',
+      },
+      responseType: 'json',
+    })
+
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Authorization', `Bearer ${process.env.FLUX_SECRET}`)
+
+    res.json(response.data)
+  }
+  catch (error) {
+    console.error('Error fetching image:', error.response ? error.response.data : error.message)
+    res.status(error.response ? error.response.status : 500).send('Failed to fetch image')
   }
 })
 

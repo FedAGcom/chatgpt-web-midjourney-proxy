@@ -207,19 +207,136 @@ export const whisperUpload = (FormData: FormData) => {
   })
 }
 
+async function fetchDataWithTimeout(d, timeout = 20000) {
+  const fetchDataWithRetry = async (d) => {
+    const getUrl = `https://api.replicate.com/v1/predictions/${d.id}`
+    const getFullUrl = `http://localhost:3002/proxy-flux-get?url=${getUrl}`
+
+    let getData = null
+
+    while (getData === null || getData.output === null) {
+      try {
+        const getResponse = await fetch(getFullUrl)
+
+        if (!getResponse.ok)
+          throw new Error('Failed to fetch image URL')
+
+        getData = await getResponse.json()
+
+        if (getData.output !== null)
+          break
+
+        await new Promise(resolve => setTimeout(resolve, 2000))
+      }
+      catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    return getData
+  }
+
+  const getDataPromise = fetchDataWithRetry(d)
+
+  const timeoutPromise = new Promise((resolve) => {
+    setTimeout(() => resolve(null), timeout)
+  })
+
+  const getData = await Promise.race([getDataPromise, timeoutPromise])
+
+  return getData
+}
+
 export const subGPT = async (data: any, chat: Chat.Chat) => {
   let d: any
   const action = data.action
   // chat.myid=  `${Date.now()}`;
   if (action == 'gpt.dall-e-3') { // 执行变化
     // chat.model= 'dall-e-3';
-
     const d = await gptFetch('/v1/images/generations', data.data)
     try {
       const rz: any = d.data[0]
       // chat.text = rz.revised_prompt ?? '图片已完成'
       chat.text = rz.revised_prompt ?? 'Генерация завершена'
-      chat.opt = { imageUrl: rz.url }
+      chat.opt = { imageUrl: rz.url, imageName: data.data.prompt }
+      chat.loading = false
+      homeStore.setMyData({ act: 'updateChat', actData: chat })
+    }
+    catch (e) {
+      chat.text = '失败！' + `\n\`\`\`json\n${JSON.stringify(d, null, 2)}\n\`\`\`\n`
+      chat.loading = false
+      homeStore.setMyData({ act: 'updateChat', actData: chat })
+    }
+  }
+  else if (action == 'gpt.flux') {
+    const bodyObj = {
+      input: {
+        prompt: data.data.prompt,
+        num_outputs: 1,
+        aspect_ratio: '1:1',
+        output_format: 'webp',
+        output_quality: 80,
+        prompt_strength: 0.8,
+        num_inference_steps: 28,
+      },
+    }
+
+    const response = await fetch('http://localhost:3002/proxy-flux-post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bodyObj),
+    })
+    d = await response.json()
+
+    //////////////////////////
+    // const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+    // await delay(6000)
+    // const getUrl = `https://api.replicate.com/v1/predictions/${d.id}`
+    // const getFullUrl = `http://localhost:3002/proxy-flux-get?url=${getUrl}`
+
+    // const getResponse = await fetch(getFullUrl)
+
+    // if (!getResponse.ok)
+    //   throw new Error('Failed to fetch image URL')
+
+    // const getData = await getResponse.json()
+    const getData = await fetchDataWithTimeout(d)
+    /////////////////////////
+
+    try {
+      const rz: any = getData
+      chat.text = rz.status === 'succeeded' ? 'Генерация завершена' : 'Ошибка'
+      chat.opt = { imageUrl: rz.output[0], imageName: rz.input.prompt }
+      chat.loading = false
+      homeStore.setMyData({ act: 'updateChat', actData: chat })
+    }
+    catch (e) {
+      chat.text = '失败！' + `\n\`\`\`json\n${JSON.stringify(d, null, 2)}\n\`\`\`\n`
+      chat.loading = false
+      homeStore.setMyData({ act: 'updateChat', actData: chat })
+    }
+  }
+}
+
+export const subFlux = async (data: any, chat: Chat.Chat) => {
+  let d: any
+  const action = data.action
+
+  if (action == 'gpt.flux') { // 执行变化
+    const request = await fetch('http://localhost:3002/proxy-flux-get', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    d = await request.json()
+    try {
+      const rz: any = d
+      // chat.text = rz.revised_prompt ?? '图片已完成'
+      chat.text = rz.status === 'succeeded' ? 'Генерация завершена' : 'Ошибка'
+      chat.opt = { imageUrl: rz.urls.get }
       chat.loading = false
       homeStore.setMyData({ act: 'updateChat', actData: chat })
     }

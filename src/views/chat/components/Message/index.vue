@@ -166,7 +166,7 @@ function handleRegenerate2() {
           :as-raw-text="asRawText"
           :chat="chat"
         />
-        <div v-if="!chat.mjID && chat.model != 'dall-e-3' && chat.model != 'dall-e-2' " class="flex flex-col">
+        <div v-if="!chat.mjID && chat.model != 'dall-e-3' && chat.model != 'dall-e-2' && chat.model != 'flux' " class="flex flex-col">
           <!-- <button
             v-if="!inversion "
             class="mb-2 transition text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-300"
